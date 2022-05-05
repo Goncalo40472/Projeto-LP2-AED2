@@ -6,61 +6,72 @@ public class Way {
 
     /* Atributos da classe Way */
 
-    private int indNoOrig;
+    private int id;
 
-    private int indNoDest;
+    private int idNoOrig;
 
-    private float weight;
+    private int idNoDest;
 
-    private Hashtable<String,String> info;
+    private double weight;
+
+    private Hashtable<String,String> tagsWay;
 
 
     /* Construtores da classe Node */
 
     public Way(){}
 
-    public Way(int indNoOrig, int indNoDest, float weight, Hashtable<String,String> info){
+    public Way(int id, int idNoOrig, int idNoDest, double weight, Hashtable<String,String> tagsWay){
 
-        setIndNoOrig(indNoOrig);
-        setIndNoDest(indNoDest);
+        setId(id);
+        setIndNoOrig(idNoOrig);
+        setIndNoDest(idNoDest);
         setWeight(weight);
-        setInfo(info);
+        setInfo(tagsWay);
 
     }
 
 
     /* Gets e sets da classe Way */
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getIndNoOrig() {
-        return indNoOrig;
+        return idNoOrig;
     }
 
     public void setIndNoOrig(int indNoOrig) {
-        this.indNoOrig = indNoOrig;
+        this.idNoOrig = indNoOrig;
     }
 
     public int getIndNoDest() {
-        return indNoDest;
+        return idNoDest;
     }
 
     public void setIndNoDest(int indNoDest) {
-        this.indNoDest = indNoDest;
+        this.idNoDest = indNoDest;
     }
 
-    public float getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(float weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
     public Hashtable<String, String> getInfo() {
-        return info;
+        return tagsWay;
     }
 
-    public void setInfo(Hashtable<String, String> info) {
-        this.info = info;
+    public void setInfo(Hashtable<String, String> tagsWay) {
+        this.tagsWay = tagsWay;
     }
 
 }

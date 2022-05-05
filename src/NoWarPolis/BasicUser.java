@@ -1,4 +1,4 @@
 package NoWarPolis;
 
-public class BasicUser extends Users {
+public class BasicUser extends User {
 }

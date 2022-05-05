@@ -2,7 +2,7 @@ package NoWarPolis;
 
 import java.util.List;
 
-public class AdminUser extends Users {
+public class AdminUser extends User {
 
 
 

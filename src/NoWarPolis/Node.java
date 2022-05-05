@@ -3,7 +3,6 @@ package NoWarPolis;
 import edu.princeton.cs.algs4.RedBlackBST;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Node {
 
