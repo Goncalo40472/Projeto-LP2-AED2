@@ -5,6 +5,7 @@ import edu.princeton.cs.algs4.RedBlackBST;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public class BaseDeDados {
 
@@ -24,9 +25,9 @@ public class BaseDeDados {
 
     private BST<Integer, Double> latNodes;
 
-    private Hashtable<String, ArrayList<Object>> tagsUsed;
+    private Hashtable<String, ArrayList<Node>> tagsNodes;
 
-    private RedBlackBST<Double, ArrayList<PoI>> PoIsVisitedByUser;
+    private Hashtable<String, ArrayList<Way>> tagsWays;
 
     private RedBlackBST<Double, ArrayList<User>> usersThatVisitedPoI;
 
@@ -90,20 +91,20 @@ public class BaseDeDados {
         this.latNodes = latNodes;
     }
 
-    public Hashtable<String, ArrayList<Object>> getTagsUsed() {
-        return tagsUsed;
+    public Hashtable<String, ArrayList<Node>> getTagsNodes() {
+        return tagsNodes;
     }
 
-    public void setTagsUsed(Hashtable<String, ArrayList<Object>> tagsUsed) {
-        this.tagsUsed = tagsUsed;
+    public void setTagsNodes(Hashtable<String, ArrayList<Node>> tagsNodes) {
+        this.tagsNodes = tagsNodes;
     }
 
-    public RedBlackBST<Double, ArrayList<PoI>> getPoIsVisitedByUser() {
-        return PoIsVisitedByUser;
+    public Hashtable<String, ArrayList<Way>> getTagsWays() {
+        return tagsWays;
     }
 
-    public void setPoIsVisitedByUser(RedBlackBST<Double, ArrayList<PoI>> poIsVisitedByUser) {
-        this.PoIsVisitedByUser = poIsVisitedByUser;
+    public void setTagsWays(Hashtable<String, ArrayList<Way>> tagsWays) {
+        this.tagsWays = tagsWays;
     }
 
     public RedBlackBST<Double, ArrayList<User>> getUsersThatVisitedPoI() {
@@ -117,14 +118,17 @@ public class BaseDeDados {
 
     /* Funções de pesquisa */
 
-    public ArrayList<PoI> searchPoIsVisitedByUser(RedBlackBST<Double, ArrayList<PoI>> PoIsVisitedByUser, double time){
+    public ArrayList<Node> searchTagNodes(String tag, Hashtable<String, ArrayList<Node>> tagsNodes){
 
-        ArrayList<PoI> arrayPoIs = new ArrayList<>();
-
-        arrayPoIs = PoIsVisitedByUser.get(time);
-
-        return arrayPoIs;
+        return tagsNodes.get(tag);
 
     }
+
+    public ArrayList<Way> searchTagWays(String tag, Hashtable<String, ArrayList<Way>> tagsWays){
+
+        return tagsWays.get(tag);
+
+    }
+
 
 }
