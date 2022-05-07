@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.RedBlackBST;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User{
 
   /* Atributos da classe User */
 
@@ -63,7 +63,7 @@ public class User {
   }
 
 
-  /* Funções */
+  /* Funções de visita */
 
   public void visitNode(double time, Node node){
 
@@ -82,5 +82,6 @@ public class User {
     PoIsVisited.put(time, poi);
 
   }
+
 
 }

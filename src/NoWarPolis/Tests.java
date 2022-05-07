@@ -23,7 +23,7 @@ public class Tests {
         String st = br.readLine();
         ArrayList<Node> nodes = new ArrayList<>();
         String[] strings;
-        RedBlackBST<String,String> tagsNode = new RedBlackBST<>();
+        Hashtable<String,String> tagsNode = new Hashtable<>();
 
         while((st = br.readLine()) != null){
 

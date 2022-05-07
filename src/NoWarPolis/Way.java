@@ -1,5 +1,7 @@
 package NoWarPolis;
 
+import edu.princeton.cs.algs4.RedBlackBST;
+
 import java.util.Hashtable;
 
 public class Way {
@@ -15,6 +17,8 @@ public class Way {
     private double weight;
 
     private Hashtable<String,String> tagsWay;
+
+    private RedBlackBST<Double, Way> usersThatVisitedWay;
 
 
     /* Construtores da classe Node */

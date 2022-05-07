@@ -2,7 +2,7 @@ package NoWarPolis;
 
 import edu.princeton.cs.algs4.RedBlackBST;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class Node {
 
@@ -14,9 +14,9 @@ public class Node {
 
   private double longitude;
 
-  private RedBlackBST<String,String> tagsNode;
+  private Hashtable<String,String> tagsNode;
 
-  private ArrayList<PoI> listOfPoIs;
+  private RedBlackBST<Double, Node> usersThatVisitedNode;
 
 
   /* Construtores da classe Node */
@@ -31,22 +31,12 @@ public class Node {
 
   }
 
-  public Node(int id, double latitude, double longitude, RedBlackBST<String,String> tagsNode){
+  public Node(int id, double latitude, double longitude, Hashtable<String,String> tagsNode){
 
     setId(id);
     setLatitude(latitude);
     setLongitude(longitude);
     setTagsNode(tagsNode);
-
-  }
-
-  public Node(int id, double latitude, double longitude, RedBlackBST<String,String> tagsNode, ArrayList<PoI> listOfPoIs){
-
-    setId(id);
-    setLatitude(latitude);
-    setLongitude(longitude);
-    setTagsNode(tagsNode);
-    setListOfPoIs(listOfPoIs);
 
   }
 
@@ -77,20 +67,12 @@ public class Node {
     this.longitude = longitude;
   }
 
-  public RedBlackBST<String, String> getTagsNode() {
+  public Hashtable<String, String> getTagsNode() {
     return tagsNode;
   }
 
-  public void setTagsNode(RedBlackBST<String, String> tagsNode) {
+  public void setTagsNode(Hashtable<String, String> tagsNode) {
     this.tagsNode = tagsNode;
-  }
-
-  public ArrayList<PoI> getListOfPoIs() {
-    return listOfPoIs;
-  }
-
-  public void setListOfPoIs(ArrayList<PoI> listOfPoIs) {
-    this.listOfPoIs = listOfPoIs;
   }
 
 }
