@@ -10,6 +10,8 @@ public class Node {
   /* Atributos da classe Node */
 
   private int id;
+  
+  private double id_coord;
 
   private double latitude;
 
