@@ -2,7 +2,8 @@ package NoWarPolis;
 
 import edu.princeton.cs.algs4.RedBlackBST;
 
-import java.util.Hashtable;
+//import java.util.Hashtable;
+import edu.princeton.cs.algs4.ST;
 
 public class Node {
 
@@ -14,16 +15,18 @@ public class Node {
 
   private double longitude;
 
-  private Hashtable<String,String> tagsNode;
+  //private Hashtable<String,String> tagsNode;
+  private ST<String,String> tagsNode;
 
-  private RedBlackBST<Double, Node> usersThatVisitedNode;
+  //private RedBlackBST<Double, Node> usersThatVisitedNode;
+  private ST<Double, Node> usersThatVisitedNode;
 
 
   /* Construtores da classe Node */
 
   public Node(){}
 
-  public Node(int id, double latitude, double longitude){
+  public Node(int id, double id_coord, double latitude, double longitude){
 
     setId(id);
     setLatitude(latitude);
@@ -31,9 +34,10 @@ public class Node {
 
   }
 
-  public Node(int id, double latitude, double longitude, Hashtable<String,String> tagsNode){
+  public Node(int id, double id_coord, double latitude, double longitude, ST<String,String> tagsNode){
 
     setId(id);
+    setId_coord(id_coord);
     setLatitude(latitude);
     setLongitude(longitude);
     setTagsNode(tagsNode);
@@ -46,9 +50,13 @@ public class Node {
   public int getId() {
     return id;
   }
+  
+   public double getId_coord() {
+    return id_coord;
+  }
 
-  public void setId(int id) {
-    this.id = id;
+  public void setId_coord(double id_coord) {
+    this.id_coord = id_coord;
   }
 
   public double getLatitude() {
@@ -67,11 +75,11 @@ public class Node {
     this.longitude = longitude;
   }
 
-  public Hashtable<String, String> getTagsNode() {
+  public ST<String, String> getTagsNode() {
     return tagsNode;
   }
 
-  public void setTagsNode(Hashtable<String, String> tagsNode) {
+  public void setTagsNode(ST<String, String> tagsNode) {
     this.tagsNode = tagsNode;
   }
 
