@@ -14,12 +14,14 @@ public class User{
   private String name;
 
   private String contact;
+  
+  private String email;
 
-  private RedBlackBST<Double, Node> nodesVisited;
+  private ST<Double, Node> nodesVisited;
 
-  private RedBlackBST<Double, Way> waysVisited;
+  private ST<Double, Way> waysVisited;
 
-  private RedBlackBST<Double, PoI> PoIsVisited;
+  private ST<Double, PoI> PoIsVisited;
 
 
   /* Construtores da classe User */
@@ -27,11 +29,12 @@ public class User{
   public User() {
   }
 
-  public User(int id, String name, String contact) {
+  public User(int id, String name, String contact, String email) {
 
     setId(id);
     setName(name);
     setContact(contact);
+    setEmail(email);
 
   }
 
@@ -40,10 +43,6 @@ public class User{
 
   public int getId() {
     return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
   }
 
   public String getName() {
@@ -61,6 +60,16 @@ public class User{
   public void setContact(String contact) {
     this.contact = contact;
   }
+  
+   public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+  
+  
 
 
   /* Funções de visita */
