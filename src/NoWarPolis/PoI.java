@@ -19,8 +19,16 @@ public class PoI extends Node {
 
     public PoI(){}
 
-    public PoI(String name, Hashtable<String,String> tagsPoI){
+    public PoI(int id, double id_coord, double latitude, double longitude, String name){
 
+        super(id,id_coord,latitude,longitude);
+        setName(name);
+
+    }
+
+    public PoI(int id, double id_coord, double latitude, double longitude, String name, Hashtable<String,String> tagsPoI){
+
+        super(id,id_coord,latitude,longitude);
         setName(name);
         setTagsPoI(tagsPoI);
 
@@ -57,8 +65,18 @@ public class PoI extends Node {
 
     }
 
+    public void addTag(String key, String value){
 
-    /* Funções de pesquisa */
+        if(this.getTagsPoI() == null){
+
+            Hashtable<String,String> tagsPoI = new Hashtable<>();
+            this.setTagsPoI(tagsPoI);
+
+        }
+
+        this.tagsPoI.put(key,value);
+
+    }
 
 
 }

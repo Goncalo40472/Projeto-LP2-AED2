@@ -1,8 +1,5 @@
 package NoWarPolis;
 
-import edu.princeton.cs.algs4.RedBlackBST;
-
-//import java.util.Hashtable;
 import edu.princeton.cs.algs4.ST;
 
 public class Node {
@@ -31,6 +28,7 @@ public class Node {
   public Node(int id, double id_coord, double latitude, double longitude){
 
     setId(id);
+    setId_coord(id_coord);
     setLatitude(latitude);
     setLongitude(longitude);
 
@@ -48,6 +46,10 @@ public class Node {
 
 
   /* Gets e sets da classe Node */
+
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public int getId() {
     return id;
@@ -83,6 +85,22 @@ public class Node {
 
   public void setTagsNode(ST<String, String> tagsNode) {
     this.tagsNode = tagsNode;
+  }
+
+
+  /* Funções de inserção */
+
+  public void addTag(String key, String value){
+
+    if(this.getTagsNode() == null){
+
+      ST<String,String> tagsNode = new ST<>();
+      this.setTagsNode(tagsNode);
+
+    }
+
+    this.tagsNode.put(key,value);
+
   }
 
 }

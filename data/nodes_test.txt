@@ -1,0 +1,6 @@
+5
+1,10,10.078,-15.069,building,yes,highway,residential
+2,15,-8.8619,12.394834
+3,12,9.7464,15.836473,bus,yes,highway,traffic_signals,crossing,marked
+4,5,-4.23928,-2.3484834,
+5,9,9.2389283,12.3123124,crossing:island,yes,highway,residential,building,yes

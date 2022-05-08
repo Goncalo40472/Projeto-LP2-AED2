@@ -1,6 +1,7 @@
 package NoWarPolis;
 
 import edu.princeton.cs.algs4.RedBlackBST;
+import edu.princeton.cs.algs4.ST;
 
 import java.util.Hashtable;
 
@@ -25,13 +26,12 @@ public class Way {
 
     public Way(){}
 
-    public Way(int id, int idNoOrig, int idNoDest, double weight, Hashtable<String,String> tagsWay){
+    public Way(int id, int idNoOrig, int idNoDest, double weight){
 
         setId(id);
-        setIndNoOrig(idNoOrig);
-        setIndNoDest(idNoDest);
+        setIdNoOrig(idNoOrig);
+        setIdNoDest(idNoDest);
         setWeight(weight);
-        setInfo(tagsWay);
 
     }
 
@@ -46,19 +46,19 @@ public class Way {
         this.id = id;
     }
 
-    public int getIndNoOrig() {
+    public int getIdNoOrig() {
         return idNoOrig;
     }
 
-    public void setIndNoOrig(int indNoOrig) {
+    public void setIdNoOrig(int indNoOrig) {
         this.idNoOrig = indNoOrig;
     }
 
-    public int getIndNoDest() {
+    public int getIdNoDest() {
         return idNoDest;
     }
 
-    public void setIndNoDest(int indNoDest) {
+    public void setIdNoDest(int indNoDest) {
         this.idNoDest = indNoDest;
     }
 
@@ -71,11 +71,43 @@ public class Way {
     }
 
     public Hashtable<String, String> getInfo() {
-        return tagsWay;
+        return getTagsWay();
     }
 
     public void setInfo(Hashtable<String, String> tagsWay) {
+        this.setTagsWay(tagsWay);
+    }
+
+    public Hashtable<String, String> getTagsWay() {
+        return tagsWay;
+    }
+
+    public void setTagsWay(Hashtable<String, String> tagsWay) {
         this.tagsWay = tagsWay;
+    }
+
+    public RedBlackBST<Double, Way> getUsersThatVisitedWay() {
+        return usersThatVisitedWay;
+    }
+
+    public void setUsersThatVisitedWay(RedBlackBST<Double, Way> usersThatVisitedWay) {
+        this.usersThatVisitedWay = usersThatVisitedWay;
+    }
+
+
+    /* Funções de inserção */
+
+    public void addTag(String key, String value){
+
+        if(this.getTagsWay() == null){
+
+            Hashtable<String,String> tagsWay = new Hashtable<>();
+            this.setTagsWay(tagsWay);
+
+        }
+
+        this.getTagsWay().put(key,value);
+
     }
 
 }

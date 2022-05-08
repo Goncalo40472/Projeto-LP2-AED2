@@ -5,6 +5,7 @@ import edu.princeton.cs.algs4.RedBlackBST;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Objects;
 
 public class BaseDeDados {
 
@@ -29,6 +30,11 @@ public class BaseDeDados {
     private Hashtable<String, ArrayList<Way>> tagsWays;
 
     private Hashtable<String,ArrayList<PoI>> tagsPoIs;
+
+
+    /* Construtores da classe BaseDeDados */
+
+    public BaseDeDados(){}
 
 
     /* Gets e sets da classe BaseDeDados */
@@ -102,10 +108,80 @@ public class BaseDeDados {
 
     }
 
+    public Node searchNode(int id){
+
+        for (Node node : this.nodes) {
+
+            if (Objects.equals(node.getId(), id)) {
+
+                return node;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    public Way searchWay(int id){
+
+        for (Way way : this.ways) {
+
+            if (Objects.equals(way.getId(), id)) {
+
+                return way;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    public PoI searchPoI(int id){
+
+        for (PoI poi : this.PoIS) {
+
+            if (Objects.equals(poi.getId(), id)) {
+
+                return poi;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    public User searchUser(String name){
+
+        for (User user : this.users) {
+
+            if (Objects.equals(user.getName(), name)) {
+
+                return user;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
 
     /* Funções de inserção */
 
     public void addNodeToTag(String tag, Node node){
+
+        if(this.tagsNodes == null){
+
+            this.tagsNodes = new Hashtable<>();
+
+        }
 
         if(this.tagsNodes.get(tag) == null){
 
@@ -126,6 +202,12 @@ public class BaseDeDados {
 
     public void addWayToTag(String tag, Way way){
 
+        if(this.tagsWays == null){
+
+            this.tagsWays = new Hashtable<>();
+
+        }
+
         if(this.tagsWays.get(tag) == null){
 
             ArrayList<Way> arrayways = new ArrayList<>();
@@ -143,6 +225,12 @@ public class BaseDeDados {
     }
 
     public void addPoIToTag(String tag, PoI poi){
+
+        if(this.tagsPoIs == null){
+
+            this.tagsPoIs = new Hashtable<>();
+
+        }
 
         if(this.tagsPoIs.get(tag) == null){
 
@@ -162,11 +250,23 @@ public class BaseDeDados {
 
     public void addNode(Node node){
 
+        if(this.nodes == null){
+
+            this.nodes = new ArrayList<>();
+
+        }
+
         this.nodes.add(node);
 
     }
 
     public void addWay(Way way){
+
+        if(this.ways == null){
+
+            this.ways = new ArrayList<>();
+
+        }
 
         this.ways.add(way);
 
@@ -174,11 +274,23 @@ public class BaseDeDados {
 
     public void addPoI(PoI poi){
 
+        if(this.PoIS == null){
+
+            this.PoIS = new ArrayList<>();
+
+        }
+
         this.PoIS.add(poi);
 
     }
 
     public void addUser(User user){
+
+        if(this.users == null){
+
+            this.users = new ArrayList<>();
+
+        }
 
         this.users.add(user);
 
@@ -186,17 +298,35 @@ public class BaseDeDados {
 
     public void addTag(String key, String value){
 
+        if(this.tags == null){
+
+            this.tags = new Hashtable<>();
+
+        }
+
         this.tags.put(key, value);
 
     }
 
     public void addLongitude(int id, double longitude){
 
+        if(this.longNodes == null){
+
+            this.longNodes = new BST<>();
+
+        }
+
         this.longNodes.put(id, longitude);
 
     }
 
     public void addLatitude(int id, double latitude){
+
+        if(this.latNodes == null){
+
+            this.latNodes = new BST<>();
+
+        }
 
         this.latNodes.put(id, latitude);
 
@@ -234,4 +364,5 @@ public class BaseDeDados {
         this.tags.remove(key);
 
     }
+
 }

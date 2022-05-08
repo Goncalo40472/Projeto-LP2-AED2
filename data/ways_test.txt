@@ -1,0 +1,5 @@
+4
+1,1,2,150,highway,residential
+2,2,3,100,bus,yes
+3,3,4,20,bus,yes,highway,traffic_signals
+4,4,5,50
