@@ -183,16 +183,7 @@ public class Tests {
         PoI poi = baseDeDados.searchPoI(1);
 
         adminUser.visitPoI(100, poi);
-        ArrayList<PoI> arrayPoIsNotVis = adminUser.searchNotVisitedPoIs(baseDeDados, 50, 150);
         ArrayList<PoI> arrayPoIsVis = adminUser.searchVisitedPoI(50, 100);
-
-        System.out.println("\n\nPoIs não visitados entre 50 e 150:\n");
-
-        for (PoI arrayPoIsNotVi : arrayPoIsNotVis) {
-
-            System.out.println(arrayPoIsNotVi.getName());
-
-        }
 
         System.out.println("\n\nPoIs visitados entre 50 e 100:\n");
 
