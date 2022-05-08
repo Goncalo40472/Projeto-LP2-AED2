@@ -1,6 +1,7 @@
 package NoWarPolis;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdminUser extends User{
 
@@ -104,22 +105,6 @@ public class AdminUser extends User{
     public User searchUser(BaseDeDados baseDeDados, String name){
 
         return baseDeDados.searchUser(name);
-
-    }
-
-    public ArrayList<PoI> searchNotVisitedPoIs(BaseDeDados baseDeDados, double time1, double time2){
-
-        ArrayList<PoI> arrayPoIs = baseDeDados.getPoIS();
-        PoI poi = new PoI();
-
-        for (double key : this.getPoIsVisited().keys(time1,time2)){
-
-            poi = this.getPoIsVisited().get(key);
-            arrayPoIs.remove(poi);
-
-        }
-
-        return arrayPoIs;
 
     }
 

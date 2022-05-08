@@ -17,6 +17,7 @@ public class Tests {
         testPoI(baseDeDados);
         testUsers(baseDeDados);
         testAdminUsersFunctions(baseDeDados);
+        now(baseDeDados);
 
     }
 
@@ -49,6 +50,7 @@ public class Tests {
                 for(int i = 4; i < strings.length; i += 2){
 
                     node.addTag(strings[i], strings[i+1]);
+                    baseDeDados.addTag(strings[i], strings[i+1]);
 
                 }
 
@@ -89,6 +91,7 @@ public class Tests {
                 for(int i = 4; i < strings.length; i += 2){
 
                     way.addTag(strings[i], strings[i+1]);
+                    baseDeDados.addTag(strings[i], strings[i+1]);
 
                 }
 
@@ -123,13 +126,14 @@ public class Tests {
             PoI poi = new PoI(id, id_coord, lat, lon, name);
 
             System.out.println("\n\nId: " + poi.getId() + "\nId Coordenada: " + poi.getId_coord() + "\nLatitude: " + poi.getLatitude()
-                    + "\nLongitude: " + poi.getLongitude());
+                    + "\nLongitude: " + poi.getLongitude() + "\nNome: " + poi.getName());
 
             if(strings.length != 5){
 
                 for(int i = 3; i < strings.length; i += 2){
 
                     poi.addTag(strings[i], strings[i+1]);
+                    baseDeDados.addTag(strings[i], strings[i+1]);
 
                 }
 
@@ -195,6 +199,29 @@ public class Tests {
         for (PoI arrayPoIsVi : arrayPoIsVis) {
 
             System.out.println(arrayPoIsVi.getName());
+
+        }
+
+    }
+
+    private static void now(BaseDeDados baseDeDados){
+
+        for(PoI poi : baseDeDados.getPoIS()){
+
+            System.out.println("\n\nId: " + poi.getId() + "\nId Coordenada: " + poi.getId_coord() + "\nLatitude: " + poi.getLatitude()
+                    + "\nLongitude: " + poi.getLongitude() + "\nNome do PoI: " + poi.getName());
+
+            if(poi.getUsersThatVisitedPoI() != null){
+
+                for(double time : poi.getUsersThatVisitedPoI().keys()){
+
+                    User user = poi.getUsersThatVisitedPoI().get(time);
+
+                    System.out.println("\nNome Utilizador " + user.getName());
+
+                }
+
+            }
 
         }
 

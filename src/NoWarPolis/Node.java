@@ -34,16 +34,6 @@ public class Node {
 
   }
 
-  public Node(int id, double id_coord, double latitude, double longitude, ST<String,String> tagsNode){
-
-    setId(id);
-    setId_coord(id_coord);
-    setLatitude(latitude);
-    setLongitude(longitude);
-    setTagsNode(tagsNode);
-
-  }
-
 
   /* Gets e sets da classe Node */
 
