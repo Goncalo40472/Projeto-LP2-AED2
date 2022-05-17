@@ -1,37 +1,31 @@
 package NoWarPolis;
 
-import edu.princeton.cs.algs4.RedBlackBST;
-import edu.princeton.cs.algs4.ST;
+import edu.princeton.cs.algs4.*;
 
 import java.util.Hashtable;
 
-public class Way {
+public class Way extends DirectedEdge {
 
     /* Atributos da classe Way */
 
     private int id;
 
-    private int idNoOrig;
-
-    private int idNoDest;
-
-    private double weight;
-
     private Hashtable<String,String> tagsWay;
 
-    private RedBlackBST<Double, Way> usersThatVisitedWay;
+    private RedBlackBST<Double, String> weights;
 
 
     /* Construtores da classe Node */
 
-    public Way(){}
-
     public Way(int id, int idNoOrig, int idNoDest, double weight){
 
+        super(idNoOrig,idNoDest,weight);
         setId(id);
-        setIdNoOrig(idNoOrig);
-        setIdNoDest(idNoDest);
-        setWeight(weight);
+        this.weights = new RedBlackBST<>();
+        timeOnBus();
+        timeOnCar();
+        timeOnBike();
+        timeOnFoot();
 
     }
 
@@ -46,52 +40,12 @@ public class Way {
         this.id = id;
     }
 
-    public int getIdNoOrig() {
-        return idNoOrig;
-    }
-
-    public void setIdNoOrig(int indNoOrig) {
-        this.idNoOrig = indNoOrig;
-    }
-
-    public int getIdNoDest() {
-        return idNoDest;
-    }
-
-    public void setIdNoDest(int indNoDest) {
-        this.idNoDest = indNoDest;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public Hashtable<String, String> getInfo() {
-        return getTagsWay();
-    }
-
-    public void setInfo(Hashtable<String, String> tagsWay) {
-        this.setTagsWay(tagsWay);
-    }
-
     public Hashtable<String, String> getTagsWay() {
         return tagsWay;
     }
 
     public void setTagsWay(Hashtable<String, String> tagsWay) {
         this.tagsWay = tagsWay;
-    }
-
-    public RedBlackBST<Double, Way> getUsersThatVisitedWay() {
-        return usersThatVisitedWay;
-    }
-
-    public void setUsersThatVisitedWay(RedBlackBST<Double, Way> usersThatVisitedWay) {
-        this.usersThatVisitedWay = usersThatVisitedWay;
     }
 
 
@@ -107,6 +61,34 @@ public class Way {
         }
 
         this.getTagsWay().put(key,value);
+
+    }
+
+    public void timeOnBus(){
+
+        double time = this.weight() * 0.02;
+        this.weights.put(time, "Bus");
+
+    }
+
+    public void timeOnCar(){
+
+        double time = this.weight() * 0.01;
+        this.weights.put(time, "Car");
+
+    }
+
+    public void timeOnBike(){
+
+        double time = this.weight() * 0.04;
+        this.weights.put(time, "Bike");
+
+    }
+
+    public void timeOnFoot(){
+
+        double time = this.weight() * 0.06;
+        this.weights.put(time, "Foot");
 
     }
 

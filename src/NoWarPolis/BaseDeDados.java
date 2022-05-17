@@ -1,7 +1,6 @@
 package NoWarPolis;
 
-import edu.princeton.cs.algs4.BST;
-import edu.princeton.cs.algs4.RedBlackBST;
+import edu.princeton.cs.algs4.*;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -169,6 +168,49 @@ public class BaseDeDados {
         }
 
         return null;
+
+    }
+
+    public ArrayList<Node> searchNodesWithTag(String tag){
+
+        ArrayList<Node> nodes = new ArrayList<>();
+
+        for(int i = 0; i < this.nodes.size(); i++){
+
+            ST<String,String> tagsNode = this.nodes.get(i).getTagsNode();
+
+            if(tagsNode.contains(tag)) nodes.add(this.nodes.get(i));
+
+        }
+
+        return nodes;
+
+    }
+
+   public ArrayList<PoI> top5VisitedPoIs(double time1, double time2){
+
+        RedBlackBST<Integer, PoI> tempPoIs = new RedBlackBST<>();
+        ArrayList<PoI> top5PoIs = new ArrayList<>();
+
+
+        int count = 0;
+
+        for(PoI p : this.PoIS){
+
+            int tam = p.searchVisitors(time1, time2).size();
+            tempPoIs.put(tam, p);
+
+        }
+
+        for(int i = 0; i < 5; i++){
+
+            int key = tempPoIs.select(0);
+            PoI poi = tempPoIs.get(key);
+            top5PoIs.add(poi);
+
+        }
+
+        return top5PoIs;
 
     }
 

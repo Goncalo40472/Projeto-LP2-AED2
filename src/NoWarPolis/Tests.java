@@ -1,11 +1,11 @@
 package NoWarPolis;
 
+import edu.princeton.cs.algs4.DirectedEdge;
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.RedBlackBST;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Scanner;
 
 public class Tests {
 
@@ -18,6 +18,13 @@ public class Tests {
         testUsers(baseDeDados);
         testAdminUsersFunctions(baseDeDados);
         now(baseDeDados);
+
+        Map map = new Map(2);
+
+        DirectedEdge de = new DirectedEdge(0,1,10);
+        DirectedEdge de2 = new DirectedEdge(1,0,5);
+        map.graph.addEdge(de);
+        map.graph.addEdge(de2);
 
     }
 
@@ -83,8 +90,8 @@ public class Tests {
 
             Way way = new Way(id,idNoOrig,idNoDest,weight);
 
-            System.out.println("\n\nId: " + way.getId() + "\nId No Origem: " + way.getIdNoOrig() + "\nId No Destino: " + way.getIdNoDest()
-                    + "\nPeso: " + way.getWeight());
+            System.out.println("\n\nId: " + way.getId() + "\nId No Origem: " + way.from() + "\nId No Destino: " + way.to()
+                    + "\nPeso: " + way.weight());
 
             if(strings.length > 4){
 
@@ -113,6 +120,18 @@ public class Tests {
 
         String st = br.readLine();
         String[] strings;
+
+        /*In in = new In(file);
+
+        in.readLine();
+
+        int a = in.readInt();
+        System.out.println("\nInputaço " + a);
+
+        in.readInt();
+
+        double d = in.readDouble();
+        System.out.println("\nInputinho " + d);*/
 
         while((st = br.readLine()) != null){
 
