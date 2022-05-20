@@ -1,34 +1,56 @@
 package NoWarPolis;
 
 import edu.princeton.cs.algs4.DirectedEdge;
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.RedBlackBST;
 
 import java.io.*;
-import java.util.ArrayList;
 
-public class Tests {
+public class Tests{
 
     public static void main(String[] args) throws IOException {
 
         BaseDeDados baseDeDados = new BaseDeDados();
-        testNodes(baseDeDados);
+
+        testFillBaseDeDados(baseDeDados);
+
+        Login login = new Login();
+        login.logUser("40472@ufp.edu.pt", "123456", baseDeDados);
+        login.logAdminUser("40472@ufp.edu.pt", "123456", baseDeDados);
+
+        //testNodes(baseDeDados);
         testWays(baseDeDados);
-        testPoI(baseDeDados);
-        testUsers(baseDeDados);
-        testAdminUsersFunctions(baseDeDados);
-        now(baseDeDados);
+        //testPoI(baseDeDados);
+        //testUsers(baseDeDados);
+        //testAdminUsersFunctions(baseDeDados);
+        baseDeDados.now();
 
         Map map = new Map(2);
 
         DirectedEdge de = new DirectedEdge(0,1,10);
         DirectedEdge de2 = new DirectedEdge(1,0,5);
-        map.graph.addEdge(de);
-        map.graph.addEdge(de2);
+        /*map.getGraph().addEdge(de);
+        map.getGraph().addEdge(de2);*/
+        System.out.println("\nSP = " + map.findShortestPath(1,0));
 
     }
 
-    private static void testNodes(BaseDeDados baseDeDados) throws IOException {
+    private static void testFillBaseDeDados(BaseDeDados baseDeDados) throws IOException {
+
+        System.out.println("\n##########################################");
+        System.out.println("Testando o populamento da base de dados...");
+
+        //baseDeDados.addAdminUser("Goncalo", "931373115", "40472@ufp.edu.pt", "123456");
+        baseDeDados.addUser("Francisco", "919874612", "42311@ufp.edu.pt", "12382397");
+        baseDeDados.addUser("Rui", "921348733", "43133@ufp.edu.pt", "21312434");
+        baseDeDados.printUsers();
+
+        baseDeDados.readNodes("C:\\Users\\gonca\\IdeaProjects\\Projeto_LP2_AED2\\data\\nodes_test.txt");
+        baseDeDados.printNodes();
+
+        System.out.println("\nFim do teste de populamento da base de dados");
+        System.out.println("############################################");
+    }
+
+    /*private static void testNodes(BaseDeDados baseDeDados) throws IOException {
 
         System.out.println("\n\nTest Nodes");
 
@@ -67,7 +89,7 @@ public class Tests {
 
         }
 
-    }
+    }*/
 
     private static void testWays(BaseDeDados baseDeDados) throws IOException {
 
@@ -110,7 +132,7 @@ public class Tests {
 
     }
 
-    private static void testPoI(BaseDeDados baseDeDados) throws IOException {
+    /*private static void testPoI(BaseDeDados baseDeDados) throws IOException {
 
         System.out.println("\n\nTest PoIs");
 
@@ -121,23 +143,11 @@ public class Tests {
         String st = br.readLine();
         String[] strings;
 
-        /*In in = new In(file);
-
-        in.readLine();
-
-        int a = in.readInt();
-        System.out.println("\nInputaço " + a);
-
-        in.readInt();
-
-        double d = in.readDouble();
-        System.out.println("\nInputinho " + d);*/
-
         while((st = br.readLine()) != null){
 
             strings = st.split(",");
             int id = Integer.parseInt(strings[0]);
-            double id_coord = Integer.parseInt(strings[1]);
+            int id_coord = Integer.parseInt(strings[1]);
             double lat = Double.parseDouble(strings[2]);
             double lon = Double.parseDouble(strings[3]);
             String name = strings[4];
@@ -162,9 +172,9 @@ public class Tests {
 
         }
 
-    }
+    }*/
 
-    private static void testUsers(BaseDeDados baseDeDados) throws IOException{
+    /*private static void testUsers(BaseDeDados baseDeDados) throws IOException{
 
         System.out.println("\n\nTest Users");
 
@@ -212,29 +222,6 @@ public class Tests {
 
         }
 
-    }
-
-    private static void now(BaseDeDados baseDeDados){
-
-        for(PoI poi : baseDeDados.getPoIS()){
-
-            System.out.println("\n\nId: " + poi.getId() + "\nId Coordenada: " + poi.getId_coord() + "\nLatitude: " + poi.getLatitude()
-                    + "\nLongitude: " + poi.getLongitude() + "\nNome do PoI: " + poi.getName());
-
-            if(poi.getUsersThatVisitedPoI() != null){
-
-                for(double time : poi.getUsersThatVisitedPoI().keys()){
-
-                    User user = poi.getUsersThatVisitedPoI().get(time);
-
-                    System.out.println("\nNome Utilizador " + user.getName());
-
-                }
-
-            }
-
-        }
-
-    }
+    }*/
 
 }

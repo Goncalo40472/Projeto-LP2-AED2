@@ -44,10 +44,6 @@ public class Way extends DirectedEdge {
         return tagsWay;
     }
 
-    public void setTagsWay(Hashtable<String, String> tagsWay) {
-        this.tagsWay = tagsWay;
-    }
-
 
     /* Funções de inserção */
 
@@ -56,7 +52,7 @@ public class Way extends DirectedEdge {
         if(this.getTagsWay() == null){
 
             Hashtable<String,String> tagsWay = new Hashtable<>();
-            this.setTagsWay(tagsWay);
+            this.tagsWay = tagsWay;
 
         }
 

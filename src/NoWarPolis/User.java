@@ -1,21 +1,20 @@
 package NoWarPolis;
 
 import edu.princeton.cs.algs4.RedBlackBST;
-import edu.princeton.cs.algs4.ST;
 
 import java.util.ArrayList;
 
-public class User{
+public class User {
 
   /* Atributos da classe User */
-
-  private int id;
 
   private String name;
 
   private String contact;
   
   private String email;
+
+  private String password;
 
   private RedBlackBST<Double, Node> nodesVisited;
 
@@ -29,25 +28,17 @@ public class User{
   public User() {
   }
 
-  public User(int id, String name, String contact, String email) {
+  public User(String name, String contact, String email, String password) {
 
-    setId(id);
     setName(name);
     setContact(contact);
     setEmail(email);
+    setPassword(password);
 
   }
 
 
   /* Gets e sets da classe User */
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getId() {
-    return id;
-  }
 
   public String getName() {
     return name;
@@ -73,28 +64,20 @@ public class User{
     this.email = email;
   }
 
-  public RedBlackBST<Double, Node> getNodesVisited() {
-    return nodesVisited;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
-  public void setNodesVisited(RedBlackBST<Double, Node> nodesVisited) {
-    this.nodesVisited = nodesVisited;
+  public RedBlackBST<Double, Node> getNodesVisited() {
+    return nodesVisited;
   }
 
   public RedBlackBST<Double, Way> getWaysVisited() {
     return waysVisited;
   }
 
-  public void setWaysVisited(RedBlackBST<Double, Way> waysVisited) {
-    this.waysVisited = waysVisited;
-  }
-
   public RedBlackBST<Double, PoI> getPoIsVisited() {
     return PoIsVisited;
-  }
-
-  public void setPoIsVisited(RedBlackBST<Double, PoI> poIsVisited) {
-    PoIsVisited = poIsVisited;
   }
   
 
@@ -150,6 +133,60 @@ public class User{
     }
 
     return arrayPoIs;
+
+  }
+
+  public ArrayList<Node> searchTagNodes(BaseDeDados baseDeDados, String tag){
+
+    return baseDeDados.searchTagNodes(tag);
+
+  }
+
+  public ArrayList<Way> searchTagWays(BaseDeDados baseDeDados, String tag){
+
+    return baseDeDados.searchTagWays(tag);
+
+  }
+
+  public ArrayList<PoI> searchTagPoIs(BaseDeDados baseDeDados, String tag){
+
+    return baseDeDados.searchTagPoIs(tag);
+
+  }
+
+  public Node searchNode(BaseDeDados baseDeDados, int id){
+
+    return baseDeDados.searchNode(id);
+
+  }
+
+  public Way searchWay(BaseDeDados baseDeDados, int id){
+
+    return baseDeDados.searchWay(id);
+
+  }
+
+  public PoI searchPoI(BaseDeDados baseDeDados, int id){
+
+    return baseDeDados.searchPoI(id);
+
+  }
+
+  public User searchUser(BaseDeDados baseDeDados, String email){
+
+    return baseDeDados.searchUser(email);
+
+  }
+
+  public AdminUser searchAdminUser(BaseDeDados baseDeDados, String email){
+
+    return baseDeDados.searchAdminUser(email);
+
+  }
+
+  public boolean checkPassword(String password){
+
+    return this.password == password;
 
   }
 

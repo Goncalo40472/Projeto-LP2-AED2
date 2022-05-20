@@ -1,34 +1,35 @@
 package NoWarPolis;
 
+import edu.princeton.cs.algs4.RedBlackBST;
 import edu.princeton.cs.algs4.ST;
+
+import java.util.Hashtable;
 
 public class Node {
 
   /* Atributos da classe Node */
 
   private int id;
-  
-  private double id_coord;
+
+  private int index;
 
   private double latitude;
 
   private double longitude;
 
-  //private Hashtable<String,String> tagsNode;
-  private ST<String,String> tagsNode;
+  private Hashtable<String,String> tagsNode;
 
-  //private RedBlackBST<Double, Node> usersThatVisitedNode;
-  private ST<Double, Node> usersThatVisitedNode;
+  private RedBlackBST<Double, Node> usersThatVisitedNode;
 
 
   /* Construtores da classe Node */
 
   public Node(){}
 
-  public Node(int id, double id_coord, double latitude, double longitude){
+  public Node(int id, int index, double latitude, double longitude){
 
     setId(id);
-    setId_coord(id_coord);
+    setIndex(index);
     setLatitude(latitude);
     setLongitude(longitude);
 
@@ -44,13 +45,13 @@ public class Node {
   public int getId() {
     return id;
   }
-  
-   public double getId_coord() {
-    return id_coord;
+
+  public void setIndex(int index) {
+    this.index = index;
   }
 
-  public void setId_coord(double id_coord) {
-    this.id_coord = id_coord;
+  public int getIndex() {
+    return index;
   }
 
   public double getLatitude() {
@@ -69,11 +70,11 @@ public class Node {
     this.longitude = longitude;
   }
 
-  public ST<String, String> getTagsNode() {
+  public Hashtable<String, String> getTagsNode() {
     return tagsNode;
   }
 
-  public void setTagsNode(ST<String, String> tagsNode) {
+  public void setTagsNode(Hashtable<String, String> tagsNode) {
     this.tagsNode = tagsNode;
   }
 
@@ -84,7 +85,7 @@ public class Node {
 
     if(this.getTagsNode() == null){
 
-      ST<String,String> tagsNode = new ST<>();
+      Hashtable<String,String> tagsNode = new Hashtable<>();
       this.setTagsNode(tagsNode);
 
     }

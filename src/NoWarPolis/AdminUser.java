@@ -5,22 +5,22 @@ import java.util.List;
 
 public class AdminUser extends User{
 
-    public AdminUser(int id, String name, String contact, String email){
+    public AdminUser(String name, String contact, String email, String password){
 
-        super(id,name,contact,email);
+        super(name,contact,email,password);
 
     }
 
 
     /* Funções de inserção */
 
-    public void addNode(BaseDeDados baseDeDados ,Node node){
+    public void addNodeToBD(BaseDeDados baseDeDados ,Node node){
 
         baseDeDados.addNode(node);
 
     }
 
-    public void addWay(BaseDeDados baseDeDados ,Way way){
+    public void addWayToBD(BaseDeDados baseDeDados ,Way way){
 
         baseDeDados.addWay(way);
 
@@ -60,51 +60,6 @@ public class AdminUser extends User{
 
         User user = baseDeDados.searchUser(name);
         baseDeDados.removeUser(user);
-
-    }
-
-
-    /* Funções de pesquisa */
-
-    public ArrayList<Node> searchTagNodes(BaseDeDados baseDeDados, String tag){
-
-        return baseDeDados.searchTagNodes(tag);
-
-    }
-
-    public ArrayList<Way> searchTagWays(BaseDeDados baseDeDados, String tag){
-
-        return baseDeDados.searchTagWays(tag);
-
-    }
-
-    public ArrayList<PoI> searchTagPoIs(BaseDeDados baseDeDados, String tag){
-
-        return baseDeDados.searchTagPoIs(tag);
-
-    }
-
-    public Node searchNode(BaseDeDados baseDeDados, int id){
-
-        return baseDeDados.searchNode(id);
-
-    }
-
-    public Way searchWay(BaseDeDados baseDeDados, int id){
-
-        return baseDeDados.searchWay(id);
-
-    }
-
-    public PoI searchPoI(BaseDeDados baseDeDados, int id){
-
-        return baseDeDados.searchPoI(id);
-
-    }
-
-    public User searchUser(BaseDeDados baseDeDados, String name){
-
-        return baseDeDados.searchUser(name);
 
     }
 

@@ -2,9 +2,8 @@ package NoWarPolis;
 
 import edu.princeton.cs.algs4.*;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
 
 public class BaseDeDados {
 
@@ -17,6 +16,10 @@ public class BaseDeDados {
     private ArrayList<PoI> PoIS;
 
     private ArrayList<User> users;
+
+    private ArrayList<AdminUser> adminUsers;
+
+    private ArrayList<Map> graphs;
 
     private Hashtable<String, String> tags;
 
@@ -52,6 +55,14 @@ public class BaseDeDados {
 
     public ArrayList<User> getUsers() {
         return users;
+    }
+
+    public ArrayList<AdminUser> getAdminUsers() {
+        return adminUsers;
+    }
+
+    public ArrayList<Map> getGraphs() {
+        return graphs;
     }
 
     public Hashtable<String, String> getTags() {
@@ -155,13 +166,33 @@ public class BaseDeDados {
 
     }
 
-    public User searchUser(String name){
+    public User searchUser(String email){
+
+        if(this.users == null) return null;
 
         for (User user : this.users) {
 
-            if (Objects.equals(user.getName(), name)) {
+            if (Objects.equals(user.getEmail(), email)) {
 
                 return user;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    public AdminUser searchAdminUser(String email){
+
+        if(this.adminUsers == null) return null;
+
+        for (AdminUser adminUser : this.adminUsers) {
+
+            if (Objects.equals(adminUser.getEmail(), email)) {
+
+                return adminUser;
 
             }
 
@@ -177,7 +208,7 @@ public class BaseDeDados {
 
         for(int i = 0; i < this.nodes.size(); i++){
 
-            ST<String,String> tagsNode = this.nodes.get(i).getTagsNode();
+            Hashtable<String,String> tagsNode = this.nodes.get(i).getTagsNode();
 
             if(tagsNode.contains(tag)) nodes.add(this.nodes.get(i));
 
@@ -326,7 +357,9 @@ public class BaseDeDados {
 
     }
 
-    public void addUser(User user){
+    public void addUser(String name, String contact, String email, String password){
+
+        User user = new User(name, contact, email, password);
 
         if(this.users == null){
 
@@ -335,6 +368,20 @@ public class BaseDeDados {
         }
 
         this.users.add(user);
+
+    }
+
+    public void addAdminUser(String name, String contact, String email, String password){
+
+        AdminUser adminUser = new AdminUser(name, contact, email, password);
+
+        if(this.adminUsers == null){
+
+            this.adminUsers = new ArrayList<>();
+
+        }
+
+        this.adminUsers.add(adminUser);
 
     }
 
@@ -404,6 +451,181 @@ public class BaseDeDados {
     public void removeTag(String key){
 
         this.tags.remove(key);
+
+    }
+
+
+    /* Método que imprime o estado atual de todos os PoI's */
+
+    public void now(){
+
+        if(this.getPoIS() == null){
+
+            System.out.println("\nThere is no PoI's!\n");
+            return;
+
+        }
+
+        for(PoI poi : this.getPoIS()){
+
+            System.out.println("\n\nId: " + poi.getId() + "\nId Coordenada: " + poi.getIndex() + "\nLatitude: " + poi.getLatitude()
+                    + "\nLongitude: " + poi.getLongitude() + "\nNome do PoI: " + poi.getName());
+
+            if(poi.getUsersThatVisitedPoI() != null){
+
+                for(double time : poi.getUsersThatVisitedPoI().keys()){
+
+                    User user = poi.getUsersThatVisitedPoI().get(time);
+
+                    System.out.println("\nNome Utilizador " + user.getName());
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /* Funções de leitura de ficheiros de texto */
+
+    public void readNodes(String filename) throws IOException {
+
+        File file = new File(filename);
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String st = br.readLine();
+        String[] strings;
+
+        while ((st = br.readLine()) != null) {
+
+            strings = st.split(",");
+            int id = Integer.parseInt(strings[0]);
+            int index = Integer.parseInt(strings[1]);
+            double lat = Double.parseDouble(strings[2]);
+            double lon = Double.parseDouble(strings[3]);
+
+            Node node = new Node(id, index, lat, lon);
+
+            if (strings.length > 4) {
+
+                for (int i = 4; i < strings.length; i += 2) {
+
+                    node.addTag(strings[i], strings[i + 1]);
+                    this.addTag(strings[i], strings[i + 1]);
+                    this.addNodeToTag(strings[i], node);
+
+                }
+
+            }
+
+            this.addNode(node);
+
+        }
+
+    }
+
+
+    /* Funções de impressão de dados */
+
+    public void printUsers(){
+
+        if(this.getUsers() == null) System.out.println("\nNao existem basic users na base de dados");
+
+        else{
+
+            System.out.println("\nBasic users na base de dados:");
+
+            for(User user : this.getUsers()){
+
+                System.out.println("\nNome: " + user.getName() + "\nContacto: " + user.getContact() + "\nEmail: " + user.getEmail());
+
+            }
+
+        }
+
+        if(this.getAdminUsers() == null) System.out.println("\nNao existem admin users na base de dados");
+
+        else{
+
+            System.out.println("\nAdmin users na base de dados:");
+
+            for(AdminUser adminUser : this.getAdminUsers()){
+
+                System.out.println("\nNome: " + adminUser.getName() + "\nContacto: " + adminUser.getContact() + "\nEmail: " + adminUser.getEmail());
+
+            }
+
+        }
+
+    }
+
+    public void printNodes(){
+
+        if(this.getNodes() == null) System.out.println("\nNao existem nodes na base de dados");
+
+        else{
+
+            System.out.println("\nNodes na base de dados:");
+
+            for(Node node : this.getNodes()){
+
+                System.out.println("\nId: " + node.getId() + "\nIndex: " + node.getIndex() + "\nLatitude: " + node.getLatitude() +
+                        "\nLongitude: " + node.getLongitude());
+
+                if(node.getTagsNode() != null){
+
+                    System.out.println("\nTags:");
+
+                    Hashtable<String,String> tags = node.getTagsNode();
+                    Set<String> keys = tags.keySet();
+
+                    for(String key : keys){
+
+                        System.out.println("Key: " + key + "\nValue: " + tags.get(key));
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    public void printWays(){
+
+        if(this.getWays() == null) System.out.println("\nNao existem ways na base de dados");
+
+        else{
+
+            System.out.println("\nWays na base de dados:");
+
+            for(Way way : this.getWays()){
+
+                System.out.println("\nId: " + way.getId() + "");
+
+                if(way.getTagsWay() != null){
+
+                    System.out.println("\nTags:");
+
+                    Hashtable<String,String> tags = way.getTagsWay();
+                    Set<String> keys = tags.keySet();
+
+                    for(String key : keys){
+
+                        System.out.println("Key: " + key + "\nValue: " + tags.get(key));
+
+                    }
+
+                }
+
+            }
+
+        }
 
     }
 

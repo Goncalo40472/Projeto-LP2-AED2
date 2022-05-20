@@ -20,9 +20,9 @@ public class PoI extends Node {
 
     public PoI(){}
 
-    public PoI(int id, double id_coord, double latitude, double longitude, String name){
+    public PoI(int id, int index, double latitude, double longitude, String name){
 
-        super(id,id_coord,latitude,longitude);
+        super(id, index, latitude,longitude);
         setName(name);
 
     }
