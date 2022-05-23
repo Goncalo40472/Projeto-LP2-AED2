@@ -3,6 +3,7 @@ package NoWarPolis;
 import edu.princeton.cs.algs4.*;
 
 import java.util.Hashtable;
+import java.util.Objects;
 
 public class Way extends DirectedEdge {
 
@@ -12,8 +13,6 @@ public class Way extends DirectedEdge {
 
     private Hashtable<String,String> tagsWay;
 
-    private RedBlackBST<Double, String> weights;
-
 
     /* Construtores da classe Node */
 
@@ -21,11 +20,6 @@ public class Way extends DirectedEdge {
 
         super(idNoOrig,idNoDest,weight);
         setId(id);
-        this.weights = new RedBlackBST<>();
-        timeOnBus();
-        timeOnCar();
-        timeOnBike();
-        timeOnFoot();
 
     }
 
@@ -51,8 +45,7 @@ public class Way extends DirectedEdge {
 
         if(this.getTagsWay() == null){
 
-            Hashtable<String,String> tagsWay = new Hashtable<>();
-            this.tagsWay = tagsWay;
+            this.tagsWay = new Hashtable<>();
 
         }
 
@@ -60,31 +53,33 @@ public class Way extends DirectedEdge {
 
     }
 
-    public void timeOnBus(){
+    public double weight(String type){
 
-        double time = this.weight() * 0.02;
-        this.weights.put(time, "Bus");
+        if(Objects.equals(type, "Bus") || Objects.equals(type, "bus")){
 
-    }
+            return super.weight() * 0.02;
 
-    public void timeOnCar(){
+        }
 
-        double time = this.weight() * 0.01;
-        this.weights.put(time, "Car");
+        if(Objects.equals(type, "Car") || Objects.equals(type, "car")){
 
-    }
+            return super.weight() * 0.01;
 
-    public void timeOnBike(){
+        }
 
-        double time = this.weight() * 0.04;
-        this.weights.put(time, "Bike");
+        if(Objects.equals(type, "Bike") || Objects.equals(type, "bike")){
 
-    }
+            return super.weight() * 0.04;
 
-    public void timeOnFoot(){
+        }
 
-        double time = this.weight() * 0.06;
-        this.weights.put(time, "Foot");
+        if(Objects.equals(type, "Foot") || Objects.equals(type, "foot")){
+
+            return super.weight() * 0.06;
+
+        }
+
+        return super.weight();
 
     }
 

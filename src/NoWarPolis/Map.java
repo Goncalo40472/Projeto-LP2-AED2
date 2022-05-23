@@ -6,19 +6,29 @@ import java.util.ArrayList;
 
 public class Map extends EdgeWeightedDigraph{
 
+    /* Atributos da classe Map */
+
     private ArrayList<Map> subgraphs;
 
     private ST<Integer,Integer> idIndexReference;
 
     private ST<Integer,Integer> indexIdReference;
 
-    public Map(int numVertexes){
+    private BaseDeDados baseDeDados;
+
+
+    /* Construtores da classe Map */
+
+    public Map(int numVertexes, BaseDeDados baseDeDados){
 
         super(numVertexes);
 
     }
 
-    public ArrayList<Node> setOfNodes(String tag, BaseDeDados baseDeDados){
+
+    /* Funções da classe Map */
+
+    public ArrayList<Node> setOfNodes(String tag){
 
         return baseDeDados.searchNodesWithTag(tag);
 
@@ -35,7 +45,7 @@ public class Map extends EdgeWeightedDigraph{
         return subgraphs;
     }
 
-    public void addSubgraphs(Map subgraph) {
+    public void addSubgraphsByTag(String tag) {
 
         if(this.subgraphs == null){
 
@@ -43,14 +53,61 @@ public class Map extends EdgeWeightedDigraph{
 
         }
 
-        this.subgraphs.add(subgraph);
+        ArrayList<Way> ways = baseDeDados.getTagsWays().get(tag);
+        ArrayList<DirectedEdge> edgesSubgraph = new ArrayList<>();
+
+        for(DirectedEdge de : this.edges()){
+
+            for(Way way : ways){
+
+                if(way.from() == de.from() && way.to() == de.to()){
+
+                    edgesSubgraph.add(de);
+
+                }
+
+            }
+
+        }
+
+        ArrayList<Integer> vertexes = new ArrayList<>();
+
+        for(DirectedEdge de : edgesSubgraph){
+
+            if(!vertexes.contains(de.from())){
+
+                vertexes.add(de.from());
+
+            }
+
+            if(!vertexes.contains(de.to())){
+
+                vertexes.add(de.to());
+
+            }
+
+        }
+
+        Map subgraph = new Map(vertexes.size(), this.baseDeDados);
+
+        for(DirectedEdge de: edgesSubgraph){
+
+            subgraph.addEdge(de);
+
+        }
 
     }
 
     public void addWayToGraph(Way way){
 
-        DirectedEdge edge = new DirectedEdge(way.from(), way.to(), way.weight());
-        this.addEdge(edge);
+        this.addEdge(way);
+
+    }
+
+    public boolean isGraphConnected(){
+
+        /* Por fazer */
+        return false;
 
     }
 

@@ -527,6 +527,81 @@ public class BaseDeDados {
 
     }
 
+    public void readWays(String filename) throws IOException {
+
+        File file = new File(filename);
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String st = br.readLine();
+        String[] strings;
+
+        while ((st = br.readLine()) != null) {
+
+            strings = st.split(",");
+            int id = Integer.parseInt(strings[0]);
+            int idNoOrig = Integer.parseInt(strings[1]);
+            int idNoDest = Integer.parseInt(strings[2]);
+            double weight = Double.parseDouble(strings[3]);
+
+            Way way = new Way(id, idNoOrig, idNoDest, weight);
+
+            if (strings.length > 4) {
+
+                for (int i = 4; i < strings.length; i += 2) {
+
+                    way.addTag(strings[i], strings[i + 1]);
+                    this.addTag(strings[i], strings[i + 1]);
+                    this.addWayToTag(strings[i], way);
+
+                }
+
+            }
+
+            this.addWay(way);
+
+        }
+
+    }
+
+    public void readPoIs(String filename) throws IOException {
+
+        File file = new File(filename);
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String st = br.readLine();
+        String[] strings;
+
+        while ((st = br.readLine()) != null) {
+
+            strings = st.split(",");
+            int id = Integer.parseInt(strings[0]);
+            int index = Integer.parseInt(strings[1]);
+            double lat = Double.parseDouble(strings[2]);
+            double lon = Double.parseDouble(strings[3]);
+            String name = strings[4];
+
+            PoI poi = new PoI(id, index, lat, lon, name);
+
+            if (strings.length > 5) {
+
+                for (int i = 5; i < strings.length; i += 2) {
+
+                    poi.addTag(strings[i], strings[i + 1]);
+                    this.addTag(strings[i], strings[i + 1]);
+                    this.addPoIToTag(strings[i], poi);
+
+                }
+
+            }
+
+            this.addPoI(poi);
+
+        }
+
+    }
+
 
     /* Funções de impressão de dados */
 
@@ -606,7 +681,10 @@ public class BaseDeDados {
 
             for(Way way : this.getWays()){
 
-                System.out.println("\nId: " + way.getId() + "");
+                System.out.println("\nId: " + way.getId() + "\nNo de Origem: " + way.from() + "\nNo de Destino: " + way.to() +
+                        "\nDistancia em metros: " + way.weight() + "\nTempo de carro(min): " + way.weight("Car") +
+                        "\nTempo de autocarro(min): " + way.weight("Bus") + "\nTempo de bicicleta(min): " + way.weight("Bike") +
+                        "\nTempo a pe(min): " + way.weight("Foot"));
 
                 if(way.getTagsWay() != null){
 
@@ -628,5 +706,40 @@ public class BaseDeDados {
         }
 
     }
+
+    public void printPoIs(){
+
+        if(this.getPoIS() == null) System.out.println("\nNao existem PoI's na base de dados");
+
+        else{
+
+            System.out.println("\nPoI's na base de dados:");
+
+            for(PoI poi : this.getPoIS()){
+
+                System.out.println("\nId: " + poi.getId() + "\nIndex: " + poi.getIndex() + "\nLatitude: " + poi.getLatitude() +
+                        "\nLongitude: " + poi.getLongitude() + "\nNome: " + poi.getName());
+
+                if(poi.getTagsPoI() != null){
+
+                    System.out.println("\nTags:");
+
+                    Hashtable<String,String> tags = poi.getTagsPoI();
+                    Set<String> keys = tags.keySet();
+
+                    for(String key : keys){
+
+                        System.out.println("Key: " + key + "\nValue: " + tags.get(key));
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
 
 }
