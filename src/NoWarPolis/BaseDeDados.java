@@ -4,6 +4,8 @@ import edu.princeton.cs.algs4.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BaseDeDados {
 
@@ -218,30 +220,113 @@ public class BaseDeDados {
 
     }
 
-   public ArrayList<PoI> top5VisitedPoIs(double time1, double time2){
+    public ArrayList<PoI> searchNotVisitedPoIs(long time1, long time2){
+
+        ArrayList<PoI> notVisitedPoIs = new ArrayList<>();
+
+        for(PoI poi : this.getPoIS()){
+
+            boolean visited = false;
+
+            for(User user : this.getUsers()){
+
+                if(user.searchVisitedPoI(time1, time2).contains(poi)){
+
+                    visited = true;
+
+                }
+
+            }
+
+            if(!visited){
+
+                notVisitedPoIs.add(poi);
+
+            }
+
+        }
+
+        return notVisitedPoIs;
+
+    }
+
+    public ArrayList<PoI> top5VisitedPoIs(long time1, long time2){
 
         RedBlackBST<Integer, PoI> tempPoIs = new RedBlackBST<>();
         ArrayList<PoI> top5PoIs = new ArrayList<>();
 
-
-        int count = 0;
-
-        for(PoI p : this.PoIS){
+        for(PoI p : this.getPoIS()){
 
             int tam = p.searchVisitors(time1, time2).size();
             tempPoIs.put(tam, p);
 
         }
 
-        for(int i = 0; i < 5; i++){
+        if(tempPoIs.size() > 5){
 
-            int key = tempPoIs.select(0);
-            PoI poi = tempPoIs.get(key);
-            top5PoIs.add(poi);
+            for(int i = 0; i < 5; i++){
+
+                int key = tempPoIs.select(i);
+                PoI poi = tempPoIs.get(key);
+                top5PoIs.add(poi);
+
+            }
+
+        }
+
+        else{
+
+            for(int i = 0; i < tempPoIs.size(); i++){
+
+                int key = tempPoIs.select(i);
+                PoI poi = tempPoIs.get(key);
+                top5PoIs.add(poi);
+
+            }
 
         }
 
         return top5PoIs;
+
+    }
+
+    public ArrayList<User> top5Visitors(long time1, long time2){
+
+        RedBlackBST<Integer, User> tempUsers = new RedBlackBST<>();
+        ArrayList<User> top5Users = new ArrayList<>();
+
+        for(User u : this.getUsers()){
+
+            int tam = u.searchVisitedPoI(time1,time2).size();
+            tempUsers.put(tam, u);
+
+        }
+
+        if(tempUsers.size() > 5){
+
+            for(int i = 0; i < 5; i++){
+
+                int key = tempUsers.select(i);
+                User user = tempUsers.get(key);
+                top5Users.add(user);
+
+            }
+
+        }
+
+        else{
+
+            for(int i = 0; i < tempUsers.size(); i++){
+
+                int key = tempUsers.select(i);
+                User user = tempUsers.get(key);
+                top5Users.add(user);
+
+            }
+
+        }
+
+        return top5Users;
 
     }
 
@@ -473,7 +558,7 @@ public class BaseDeDados {
 
             if(poi.getUsersThatVisitedPoI() != null){
 
-                for(double time : poi.getUsersThatVisitedPoI().keys()){
+                for(long time : poi.getUsersThatVisitedPoI().keys()){
 
                     User user = poi.getUsersThatVisitedPoI().get(time);
 
@@ -602,6 +687,283 @@ public class BaseDeDados {
 
     }
 
+    public void readNodesBin() throws IOException {
+
+        DataInputStream dis = null;
+
+        dis = new DataInputStream(new BufferedInputStream(new FileInputStream("C:\\Users\\gonca\\IdeaProjects\\Projeto_LP2_AED2\\data\\Nodes.bin")));
+
+        int size = dis.readInt();
+
+        for(int i = 0; i < size; i++){
+
+            int id = dis.readInt();
+            int index = dis.readInt();
+            double lat = dis.readDouble();
+            double lon = dis.readDouble();
+
+            Node node = new Node(id, index, lat, lon);
+
+            if(dis.readInt() == 1){
+
+                String key = "";
+                String value = "";
+                char c = dis.readChar();
+                int j = 0;
+
+                while(c != '*'){
+
+                    if(c != ',' && j == 0){
+
+                        key += c;
+
+                    }
+
+                    else if(c != ',' && j == 1){
+
+                        value += c;
+
+                    }
+
+                    if(c == ',' && j == 0) {
+
+                        j = 1;
+
+                    }
+
+                    else if (c == ',' && j == 1){
+
+                        node.addTag(key, value);
+                        key = "";
+                        value = "";
+                        j = 0;
+
+                    }
+
+                    c = dis.readChar();
+
+                }
+
+            }
+
+            this.addNode(node);
+
+        }
+
+        dis.close();
+
+    }
+
+    /* Funções de escrita para ficheiros de texto */
+
+    public void writeNodesTxt(){
+
+        FileWriter fw = null;
+        PrintWriter pw = null;
+
+        try {
+            File f = new File("data", "Nodes.txt");
+            fw = new FileWriter(f);
+            pw = new PrintWriter(fw);
+
+            pw.println(this.getNodes().size());
+            pw.flush();
+
+            for(Node node : this.getNodes()){
+
+                pw.print(node.getId());
+                pw.print(",");
+                pw.print(node.getIndex());
+                pw.print(",");
+                pw.print(node.getLatitude());
+                pw.print(",");
+                pw.print(node.getLongitude());
+
+                if(node.getTagsNode() != null){
+
+                    for(String key : node.getTagsNode().keySet()){
+
+                        pw.print(",");
+                        pw.print(key);
+                        pw.print(",");
+                        pw.print(node.getTagsNode().get(key));
+
+                    }
+
+                }
+
+                pw.println();
+                pw.flush();
+
+            }
+
+
+        } catch (Exception e) {
+            System.err.println("FilePrintWriterApp - main(): " + e);
+        } finally {
+            try {
+                // Flush and close
+                if (pw!=null) pw.close();
+                if (fw!=null) fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    public void writeWaysTxt(){
+
+        FileWriter fw = null;
+        PrintWriter pw = null;
+
+        try {
+            File f = new File("data", "Ways.txt");
+            fw = new FileWriter(f);
+            pw = new PrintWriter(fw);
+
+            pw.println(this.getWays().size());
+            pw.flush();
+
+            for(Way way : this.getWays()){
+
+                pw.print(way.getId());
+                pw.print(",");
+                pw.print(way.from());
+                pw.print(",");
+                pw.print(way.to());
+                pw.print(",");
+                pw.print(way.weight());
+
+                if(way.getTagsWay() != null){
+
+                    for(String key : way.getTagsWay().keySet()){
+
+                        pw.print(",");
+                        pw.print(key);
+                        pw.print(",");
+                        pw.print(way.getTagsWay().get(key));
+
+                    }
+
+                }
+
+                pw.println();
+                pw.flush();
+
+            }
+
+
+        } catch (Exception e) {
+            System.err.println("FilePrintWriterApp - main(): " + e);
+        } finally {
+            try {
+                // Flush and close
+                if (pw!=null) pw.close();
+                if (fw!=null) fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    public void writePoIsTxt(){
+
+        FileWriter fw = null;
+        PrintWriter pw = null;
+
+        try {
+            File f = new File("data", "PoIs.txt");
+            fw = new FileWriter(f);
+            pw = new PrintWriter(fw);
+
+            pw.println(this.getPoIS().size());
+            pw.flush();
+
+            for(PoI poi : this.getPoIS()){
+
+                pw.print(poi.getId());
+                pw.print(",");
+                pw.print(poi.getIndex());
+                pw.print(",");
+                pw.print(poi.getLatitude());
+                pw.print(",");
+                pw.print(poi.getLongitude());
+                pw.print(",");
+                pw.print(poi.getName());
+
+                if(poi.getTagsPoI() != null){
+
+                    for(String key : poi.getTagsPoI().keySet()){
+
+                        pw.print(",");
+                        pw.print(key);
+                        pw.print(",");
+                        pw.print(poi.getTagsPoI().get(key));
+
+                    }
+
+                }
+
+                pw.println();
+                pw.flush();
+
+            }
+
+
+        } catch (Exception e) {
+            System.err.println("FilePrintWriterApp - main(): " + e);
+        } finally {
+            try {
+                // Flush and close
+                if (pw!=null) pw.close();
+                if (fw!=null) fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    public void writeNodesBin() throws IOException {
+
+        DataOutputStream dos = null;
+        dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/NodesOut.bin")));
+
+        dos.writeInt(this.getNodes().size());
+
+        for(Node node : this.getNodes()){
+
+            dos.writeInt(node.getId());
+            dos.writeInt(node.getIndex());
+            dos.writeDouble(node.getLatitude());
+            dos.writeDouble(node.getLongitude());
+
+            if(node.getTagsNode() != null){
+
+                dos.writeInt(1);
+
+                for(String key : node.getTagsNode().keySet()){
+
+                    dos.writeChars(key);
+                    dos.writeChars(",");
+                    dos.writeChars(node.getTagsNode().get(key));
+                    dos.writeChars(",");
+
+                }
+
+                dos.writeChars("*");
+
+            }
+
+            dos.writeInt(0);
+
+        }
+
+        dos.close();
+
+    }
 
     /* Funções de impressão de dados */
 

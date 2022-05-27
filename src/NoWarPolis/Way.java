@@ -13,6 +13,8 @@ public class Way extends DirectedEdge {
 
     private Hashtable<String,String> tagsWay;
 
+    private RedBlackBST<Long, User> usersThatVisitedWay;
+
 
     /* Construtores da classe Node */
 
@@ -37,6 +39,8 @@ public class Way extends DirectedEdge {
     public Hashtable<String, String> getTagsWay() {
         return tagsWay;
     }
+
+    public RedBlackBST<Long, User> getUsersThatVisitedWay(){return this.usersThatVisitedWay;}
 
 
     /* Funções de inserção */
@@ -80,6 +84,18 @@ public class Way extends DirectedEdge {
         }
 
         return super.weight();
+
+    }
+
+    public void userVisitedWay(long time, User user){
+
+        if(this.usersThatVisitedWay == null){
+
+            this.usersThatVisitedWay = new RedBlackBST<>();
+
+        }
+
+        this.getUsersThatVisitedWay().put(time, user);
 
     }
 

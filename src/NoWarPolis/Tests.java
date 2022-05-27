@@ -3,6 +3,7 @@ package NoWarPolis;
 import edu.princeton.cs.algs4.DirectedEdge;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class Tests{
 
@@ -28,7 +29,8 @@ public class Tests{
         baseDeDados.addUser("Francisco", "919874612", "42311@ufp.edu.pt", "12382397");
         baseDeDados.printUsers();
 
-        baseDeDados.readNodes("C:\\Users\\gonca\\IdeaProjects\\Projeto_LP2_AED2\\data\\nodes_test.txt");
+        //baseDeDados.readNodes("C:\\Users\\gonca\\IdeaProjects\\Projeto_LP2_AED2\\data\\nodes_test.txt");
+        baseDeDados.readNodesBin();
         baseDeDados.printNodes();
 
         baseDeDados.readWays("C:\\Users\\gonca\\IdeaProjects\\Projeto_LP2_AED2\\data\\ways_test.txt");
@@ -36,6 +38,11 @@ public class Tests{
 
         baseDeDados.readPoIs("C:\\Users\\gonca\\IdeaProjects\\Projeto_LP2_AED2\\data\\pois_test.txt");
         baseDeDados.printPoIs();
+
+        baseDeDados.writeNodesTxt();
+        baseDeDados.writeWaysTxt();
+        baseDeDados.writePoIsTxt();
+        baseDeDados.writeNodesBin();
 
         System.out.println("\nFim do teste");
         System.out.println("##############################################");
@@ -83,6 +90,7 @@ public class Tests{
         System.out.println("\nGrafo: " +  map);
 
         System.out.println("\nCaminho mais curto de 0 para 1:\n" + map.findShortestPath(0,1));
+        System.out.println("\nO grafo é conexo?\nR: " + map.isGraphConnected());
 
         System.out.println("\nFim do teste");
         System.out.println("##############################################");

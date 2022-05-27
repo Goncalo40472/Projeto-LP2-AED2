@@ -13,7 +13,7 @@ public class PoI extends Node {
 
     private Hashtable<String,String> tagsPoI;
 
-    private RedBlackBST<Double, User> usersThatVisitedPoI;
+    private RedBlackBST<Long, User> usersThatVisitedPoI;
 
 
     /* Construtores da classe PoI */
@@ -46,14 +46,14 @@ public class PoI extends Node {
         this.tagsPoI = tagsPoI;
     }
 
-    public RedBlackBST<Double, User> getUsersThatVisitedPoI() {
+    public RedBlackBST<Long, User> getUsersThatVisitedPoI() {
         return usersThatVisitedPoI;
     }
 
 
     /* Funções de inserção */
 
-    public void userVisitedPoI(double time, User user){
+    public void userVisitedPoI(long time, User user){
 
         if(this.getUsersThatVisitedPoI() == null){
 
@@ -78,11 +78,11 @@ public class PoI extends Node {
 
     }
 
-    public ArrayList<User> searchVisitors(double time1, double time2){
+    public ArrayList<User> searchVisitors(long time1, long time2){
 
         ArrayList<User> arrayUsers = new ArrayList<>();
 
-        for (double key : this.getUsersThatVisitedPoI().keys(time1,time2)){
+        for (long key : this.getUsersThatVisitedPoI().keys(time1,time2)){
 
             arrayUsers.add(this.getUsersThatVisitedPoI().get(key));
 
@@ -91,6 +91,5 @@ public class PoI extends Node {
         return arrayUsers;
 
     }
-
 
 }

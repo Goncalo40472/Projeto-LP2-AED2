@@ -19,7 +19,7 @@ public class Node {
 
   private Hashtable<String,String> tagsNode;
 
-  private RedBlackBST<Double, Node> usersThatVisitedNode;
+  private RedBlackBST<Long, User> usersThatVisitedNode;
 
 
   /* Construtores da classe Node */
@@ -78,6 +78,8 @@ public class Node {
     this.tagsNode = tagsNode;
   }
 
+  public RedBlackBST<Long, User> getUsersThatVisitedNode(){return this.usersThatVisitedNode;}
+
 
   /* Funções de inserção */
 
@@ -91,6 +93,18 @@ public class Node {
     }
 
     this.tagsNode.put(key,value);
+
+  }
+
+  public void userVisitedNode(long time, User user){
+
+    if(this.usersThatVisitedNode == null){
+
+      this.usersThatVisitedNode = new RedBlackBST<>();
+
+    }
+
+    this.getUsersThatVisitedNode().put(time, user);
 
   }
 

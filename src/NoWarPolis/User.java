@@ -3,6 +3,8 @@ package NoWarPolis;
 import edu.princeton.cs.algs4.RedBlackBST;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 public class User {
 
@@ -16,11 +18,11 @@ public class User {
 
   private String password;
 
-  private RedBlackBST<Double, Node> nodesVisited;
+  private RedBlackBST<Long, Node> nodesVisited;
 
-  private RedBlackBST<Double, Way> waysVisited;
+  private RedBlackBST<Long, Way> waysVisited;
 
-  private RedBlackBST<Double, PoI> PoIsVisited;
+  private RedBlackBST<Long, PoI> PoIsVisited;
 
 
   /* Construtores da classe User */
@@ -34,6 +36,9 @@ public class User {
     setContact(contact);
     setEmail(email);
     setPassword(password);
+    this.nodesVisited = new RedBlackBST<>();
+    this.waysVisited = new RedBlackBST<>();
+    this.PoIsVisited = new RedBlackBST<>();
 
   }
 
@@ -68,22 +73,24 @@ public class User {
     this.password = password;
   }
 
-  public RedBlackBST<Double, Node> getNodesVisited() {
+  public RedBlackBST<Long, Node> getNodesVisited() {
     return nodesVisited;
   }
 
-  public RedBlackBST<Double, Way> getWaysVisited() {
+  public RedBlackBST<Long, Way> getWaysVisited() {
     return waysVisited;
   }
 
-  public RedBlackBST<Double, PoI> getPoIsVisited() {
+  public RedBlackBST<Long, PoI> getPoIsVisited() {
     return PoIsVisited;
   }
   
 
   /* Funções de visita */
 
-  public void visitNode(double time, Node node){
+  public void visitNode(BaseDeDados baseDeDados, int id){
+
+    Node node = baseDeDados.searchNode(id);
 
     if(this.nodesVisited == null){
 
@@ -91,11 +98,16 @@ public class User {
 
     }
 
-    getNodesVisited().put(time, node);
+    Date date = new Date();
+
+    getNodesVisited().put(date.getTime(), node);
+    node.userVisitedNode(date.getTime(), this);
 
   }
 
-  public void visitWay(double time, Way way){
+  public void visitWay(BaseDeDados baseDeDados, int id){
+
+    Way way = baseDeDados.searchWay(id);
 
     if(this.waysVisited == null){
 
@@ -103,11 +115,15 @@ public class User {
 
     }
 
-    getWaysVisited().put(time, way);
+    Date date = new Date();
+
+    getWaysVisited().put(date.getTime(), way);
 
   }
 
-  public void visitPoI(double time, PoI poi){
+  public void visitPoI(BaseDeDados baseDeDados, int id){
+
+    PoI poi = baseDeDados.searchPoI(id);
 
     if(this.PoIsVisited == null){
 
@@ -115,24 +131,45 @@ public class User {
 
     }
 
-    getPoIsVisited().put(time, poi);
-    poi.userVisitedPoI(time, this);
+    Date date = new Date();
+
+    getPoIsVisited().put(date.getTime(), poi);
+    poi.userVisitedPoI(date.getTime(), this);
 
   }
 
   /* Funções de pesquisa */
 
-  public ArrayList<PoI> searchVisitedPoI(double time1, double time2){
+  public ArrayList<PoI> searchVisitedPoI(long time1, long time2){
 
     ArrayList<PoI> arrayPoIs = new ArrayList<>();
 
-    for (double key : this.getPoIsVisited().keys(time1,time2)){
+    for (long key : this.getPoIsVisited().keys(time1,time2)){
 
         arrayPoIs.add(this.getPoIsVisited().get(key));
 
     }
 
     return arrayPoIs;
+
+  }
+
+  public ArrayList<PoI> searchNotVisitedPoI(BaseDeDados baseDeDados ,long time1, long time2){
+
+    ArrayList<PoI> arrayPoIsVisited = searchVisitedPoI(time1, time2);
+    ArrayList<PoI> arrayPoIsNotVisited = new ArrayList<>();
+
+    for(PoI poi : baseDeDados.getPoIS()){
+
+      if(!arrayPoIsVisited.contains(poi)){
+
+        arrayPoIsNotVisited.add(poi);
+
+      }
+
+    }
+
+    return arrayPoIsNotVisited;
 
   }
 
@@ -186,7 +223,7 @@ public class User {
 
   public boolean checkPassword(String password){
 
-    return this.password == password;
+    return Objects.equals(this.password, password);
 
   }
 
