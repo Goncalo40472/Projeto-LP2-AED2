@@ -1,8 +1,8 @@
 package NoWarPolis;
 
-public class LogIn {
+public class Login {
 
-    public LogIn() {
+    public Login() {
     }
 
     public User logUser(String email, String password, BaseDeDados baseDeDados) {

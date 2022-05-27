@@ -46,7 +46,7 @@ public class Tests{
         System.out.println("\n###########################################");
         System.out.println("Testando login...");
 
-        LogIn login = new LogIn();
+        Login login = new Login();
 
         System.out.println("\nLogin com admin user como basic user:");
         login.logUser("40472@ufp.edu.pt", "123456", baseDeDados);
