@@ -23,6 +23,16 @@ public class BaseDeDados {
 
     private ArrayList<Map> graphs;
 
+    private ArrayList<Node> nodesRemoved;
+
+    private ArrayList<Way> waysRemoved;
+
+    private ArrayList<PoI> PoISRemoved;
+
+    private ArrayList<User> usersRemoved;
+
+    private ArrayList<AdminUser> adminUsersRemoved;
+
     private Hashtable<String, String> tags;
 
     private BST<Integer, Double> longNodes;
@@ -38,7 +48,27 @@ public class BaseDeDados {
 
     /* Construtores da classe BaseDeDados */
 
-    public BaseDeDados(){}
+    public BaseDeDados(){
+
+        nodes = new ArrayList<>();
+        ways = new ArrayList<>();
+        PoIS = new ArrayList<>();
+        users = new ArrayList<>();
+        adminUsers = new ArrayList<>();
+        graphs = new ArrayList<>();
+        nodesRemoved = new ArrayList<>();
+        waysRemoved = new ArrayList<>();
+        PoISRemoved = new ArrayList<>();
+        usersRemoved = new ArrayList<>();
+        adminUsersRemoved = new ArrayList<>();
+        tags = new Hashtable<>();
+        longNodes = new BST<>();
+        latNodes = new BST<>();
+        tagsNodes = new Hashtable<>();
+        tagsWays = new Hashtable<>();
+        tagsPoIs = new Hashtable<>();
+
+    }
 
 
     /* Gets e sets da classe BaseDeDados */
@@ -65,6 +95,26 @@ public class BaseDeDados {
 
     public ArrayList<Map> getGraphs() {
         return graphs;
+    }
+
+    public ArrayList<Node> getNodesRemoved() {
+        return nodesRemoved;
+    }
+
+    public ArrayList<Way> getWaysRemoved() {
+        return waysRemoved;
+    }
+
+    public ArrayList<PoI> getPoISRemoved() {
+        return PoISRemoved;
+    }
+
+    public ArrayList<User> getUsersRemoved() {
+        return usersRemoved;
+    }
+
+    public ArrayList<AdminUser> getAdminUsersRemoved() {
+        return adminUsersRemoved;
     }
 
     public Hashtable<String, String> getTags() {
@@ -99,6 +149,10 @@ public class BaseDeDados {
         return tagsWays;
     }
 
+    public Hashtable<String, ArrayList<PoI>> getTagsPoIs() {
+        return tagsPoIs;
+    }
+
 
     /* Funções de pesquisa */
 
@@ -108,15 +162,72 @@ public class BaseDeDados {
 
     }
 
+    public ArrayList<Node> searchNodeWithTag(String key,String value){
+
+        ArrayList<Node> nodes = searchTagNodes(key);
+        ArrayList<Node> nodesWithValue = new ArrayList<>();
+
+        for(Node node : nodes){
+
+            if(Objects.equals(node.getTagsNode().get(key), value)){
+
+                nodesWithValue.add(node);
+
+            }
+
+        }
+
+        return nodesWithValue;
+
+    }
+
     public ArrayList<Way> searchTagWays(String tag){
 
         return this.tagsWays.get(tag);
 
     }
 
+    public ArrayList<Way> searchWayWithTag(String key,String value){
+
+        ArrayList<Way> ways = searchTagWays(key);
+        ArrayList<Way> waysWithValue = new ArrayList<>();
+
+        for(Way way : ways){
+
+            if(Objects.equals(way.getTagsWay().get(key), value)){
+
+                waysWithValue.add(way);
+
+            }
+
+        }
+
+        return waysWithValue;
+
+    }
+
     public ArrayList<PoI> searchTagPoIs(String tag){
 
         return this.tagsPoIs.get(tag);
+
+    }
+
+    public ArrayList<PoI> searchPoIsWithTag(String key,String value){
+
+        ArrayList<PoI> pois = searchTagPoIs(key);
+        ArrayList<PoI> PoIsWithValue = new ArrayList<>();
+
+        for(PoI poi : pois){
+
+            if(Objects.equals(poi.getTagsPoI().get(key), value)){
+
+                PoIsWithValue.add(poi);
+
+            }
+
+        }
+
+        return PoIsWithValue;
 
     }
 
@@ -204,22 +315,6 @@ public class BaseDeDados {
 
     }
 
-    public ArrayList<Node> searchNodesWithTag(String tag){
-
-        ArrayList<Node> nodes = new ArrayList<>();
-
-        for(int i = 0; i < this.nodes.size(); i++){
-
-            Hashtable<String,String> tagsNode = this.nodes.get(i).getTagsNode();
-
-            if(tagsNode.contains(tag)) nodes.add(this.nodes.get(i));
-
-        }
-
-        return nodes;
-
-    }
-
     public ArrayList<PoI> searchNotVisitedPoIs(long time1, long time2){
 
         ArrayList<PoI> notVisitedPoIs = new ArrayList<>();
@@ -231,6 +326,16 @@ public class BaseDeDados {
             for(User user : this.getUsers()){
 
                 if(user.searchVisitedPoI(time1, time2).contains(poi)){
+
+                    visited = true;
+
+                }
+
+            }
+
+            for(AdminUser adminUser : this.getAdminUsers()){
+
+                if(adminUser.searchVisitedPoI(time1, time2).contains(poi)){
 
                     visited = true;
 
@@ -292,23 +397,79 @@ public class BaseDeDados {
 
     public ArrayList<User> top5Visitors(long time1, long time2){
 
-        RedBlackBST<Integer, User> tempUsers = new RedBlackBST<>();
+        RedBlackBST<Integer, ArrayList<User>> tempUsers = new RedBlackBST<>();
         ArrayList<User> top5Users = new ArrayList<>();
 
         for(User u : this.getUsers()){
 
             int tam = u.searchVisitedPoI(time1,time2).size();
-            tempUsers.put(tam, u);
+
+            if(tempUsers.contains(tam)){
+
+                tempUsers.get(tam).add(u);
+
+            }
+
+            else{
+
+                ArrayList<User> array = new ArrayList<>();
+                array.add(u);
+                tempUsers.put(tam, array);
+
+            }
 
         }
+
+        for(AdminUser au : this.getAdminUsers()){
+
+            int tam = au.searchVisitedPoI(time1,time2).size();
+
+            if(tempUsers.contains(tam)){
+
+                tempUsers.get(tam).add(au);
+
+            }
+
+            else{
+
+                ArrayList<User> array = new ArrayList<>();
+                array.add(au);
+                tempUsers.put(tam, array);
+
+            }
+
+        }
+
+        int totalUsers = 0;
 
         if(tempUsers.size() > 5){
 
             for(int i = 0; i < 5; i++){
 
                 int key = tempUsers.select(i);
-                User user = tempUsers.get(key);
-                top5Users.add(user);
+                ArrayList<User> users = tempUsers.get(key);
+
+                if(totalUsers == 5) break;
+
+                if(totalUsers + users.size() <= 5){
+
+                    top5Users.addAll(users);
+                    totalUsers += users.size();
+
+                }
+
+                else{
+
+                    for(User user : users){
+
+                        if(totalUsers == 5) break;
+
+                        top5Users.add(user);
+                        totalUsers++;
+
+                    }
+
+                }
 
             }
 
@@ -319,8 +480,29 @@ public class BaseDeDados {
             for(int i = 0; i < tempUsers.size(); i++){
 
                 int key = tempUsers.select(i);
-                User user = tempUsers.get(key);
-                top5Users.add(user);
+                ArrayList<User> users = tempUsers.get(key);
+
+                if(totalUsers == 5) break;
+
+                if(totalUsers + users.size() <= 5){
+
+                    top5Users.addAll(users);
+                    totalUsers += users.size();
+
+                }
+
+                else{
+
+                    for(User user : users){
+
+                        if(totalUsers == 5) break;
+
+                        top5Users.add(user);
+                        totalUsers++;
+
+                    }
+
+                }
 
             }
 
@@ -415,6 +597,8 @@ public class BaseDeDados {
         }
 
         this.nodes.add(node);
+        addLatitude(node.getId(), node.getLatitude());
+        addLongitude(node.getId(), node.getLongitude());
 
     }
 
@@ -509,33 +693,237 @@ public class BaseDeDados {
 
     /* Funções de remoção */
 
-    public void removeNode(Node node){
+    public void removeNode(int id){
+
+        Node node = this.searchNode(id);
+
+        for(User user : this.getUsers()){
+
+            for(Long key : user.getNodesVisited().keys()){
+
+                if(user.getNodesVisited().get(key) == node){
+
+                    user.getNodesVisited().delete(key);
+
+                }
+
+            }
+
+        }
+
+        for(AdminUser adminUser : this.getAdminUsers()){
+
+            for(Long key : adminUser.getNodesVisited().keys()){
+
+                if(adminUser.getNodesVisited().get(key) == node){
+
+                    adminUser.getNodesVisited().delete(key);
+
+                }
+
+            }
+
+        }
+
+        ArrayList<Way> ways = new ArrayList<>();
+
+        for(Way way : this.getWays()){
+
+            if(way.from() == id || way.to() == id){
+
+                ways.add(way);
+
+            }
+
+        }
+
+        for(Way way : ways){
+
+            this.getWays().remove(way);
+
+        }
+
+        for(Integer key : this.getLatNodes().keys()){
+
+            if(key == id){
+
+                this.getLatNodes().delete(key);
+
+            }
+
+        }
+
+        for(Integer key : this.getLongNodes().keys()){
+
+            if(key == id){
+
+                this.getLongNodes().delete(key);
+
+            }
+
+        }
+
+        ArrayList<Node> nodes = new ArrayList<>();
+
+        for(String key : this.getTagsNodes().keySet()){
+
+            for(Node n : this.getTagsNodes().get(key)){
+
+                if(n.getId() == id){
+
+                    nodes.add(n);
+
+                }
+
+            }
+
+            for (Node n : nodes){
+
+                this.getTagsNodes().get(key).remove(n);
+
+            }
+
+        }
 
         this.nodes.remove(node);
+        this.nodesRemoved.add(node);
 
     }
 
-    public void removeWay(Way way){
+    public void removeWay(int id){
+
+        Way way = this.searchWay(id);
+
+        for(User user : this.getUsers()){
+
+            for(Long key : user.getWaysVisited().keys()){
+
+                if(user.getWaysVisited().get(key) == way){
+
+                    user.getWaysVisited().delete(key);
+
+                }
+
+            }
+
+        }
+
+        for(AdminUser adminUser : this.getAdminUsers()){
+
+            for(Long key : adminUser.getWaysVisited().keys()){
+
+                if(adminUser.getWaysVisited().get(key) == way){
+
+                    adminUser.getWaysVisited().delete(key);
+
+                }
+
+            }
+
+        }
+
+        ArrayList<Way> ways = new ArrayList<>();
+
+        for(String key : this.getTagsWays().keySet()){
+
+            for(Way w : this.getTagsWays().get(key)){
+
+                if(w.getId() == id){
+
+                    ways.add(w);
+
+                }
+
+            }
+
+            for (Way w : ways){
+
+                this.getTagsWays().get(key).remove(w);
+
+            }
+
+        }
 
         this.ways.remove(way);
+        this.getWaysRemoved().add(way);
 
     }
 
-    public void removePoI(PoI poi){
+    public void removePoI(int id){
+
+        PoI poi = this.searchPoI(id);
+
+        for(User user : this.getUsers()){
+
+            for(Long key : user.getPoIsVisited().keys()){
+
+                if(user.getPoIsVisited().get(key) == poi){
+
+                    user.getPoIsVisited().delete(key);
+
+                }
+
+            }
+
+        }
+
+        for(AdminUser adminUser : this.getAdminUsers()){
+
+            for(Long key : adminUser.getPoIsVisited().keys()){
+
+                if(adminUser.getPoIsVisited().get(key) == poi){
+
+                    adminUser.getPoIsVisited().delete(key);
+
+                }
+
+            }
+
+        }
+
+        ArrayList<PoI> pois = new ArrayList<>();
+
+        for(String key : this.getTags().keySet()){
+
+            for(PoI p : this.getTagsPoIs().get(key)){
+
+                if(p.getId() == id){
+
+                    pois.add(p);
+
+                }
+
+            }
+
+            for (PoI p : pois){
+
+                this.getTagsPoIs().get(key).remove(p);
+
+            }
+
+        }
 
         this.PoIS.remove(poi);
+        this.getPoISRemoved().add(poi);
+
 
     }
 
-    public void removeUser(User user){
+    public void removeUser(String name){
+
+        User user = searchUser(name);
 
         this.users.remove(user);
+        this.getUsersRemoved().add(user);
 
     }
 
-    public void removeTag(String key){
+    public void removeAdminUser(String name){
 
-        this.tags.remove(key);
+        AdminUser adminUser = searchAdminUser(name);
+
+        this.adminUsers.remove(adminUser);
+        this.getAdminUsersRemoved().add(adminUser);
 
     }
 
@@ -550,6 +938,9 @@ public class BaseDeDados {
             return;
 
         }
+
+        System.out.println("\n###########################################");
+        System.out.println("\nEstado atual dos PoIS:");
 
         for(PoI poi : this.getPoIS()){
 
@@ -569,6 +960,8 @@ public class BaseDeDados {
             }
 
         }
+
+        System.out.println("\n###########################################");
 
     }
 
@@ -687,72 +1080,131 @@ public class BaseDeDados {
 
     }
 
-    public void readNodesBin() throws IOException {
+    public void readNodesBin(){
 
-        DataInputStream dis = null;
+        String filename = "data/Nodes.bin";
 
-        dis = new DataInputStream(new BufferedInputStream(new FileInputStream("C:\\Users\\gonca\\IdeaProjects\\Projeto_LP2_AED2\\data\\Nodes.bin")));
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
 
-        int size = dis.readInt();
+            int size = (Integer) ois.readObject();
 
-        for(int i = 0; i < size; i++){
+            for(int i = 0; i < size; i++){
 
-            int id = dis.readInt();
-            int index = dis.readInt();
-            double lat = dis.readDouble();
-            double lon = dis.readDouble();
-
-            Node node = new Node(id, index, lat, lon);
-
-            if(dis.readInt() == 1){
-
-                String key = "";
-                String value = "";
-                char c = dis.readChar();
-                int j = 0;
-
-                while(c != '*'){
-
-                    if(c != ',' && j == 0){
-
-                        key += c;
-
-                    }
-
-                    else if(c != ',' && j == 1){
-
-                        value += c;
-
-                    }
-
-                    if(c == ',' && j == 0) {
-
-                        j = 1;
-
-                    }
-
-                    else if (c == ',' && j == 1){
-
-                        node.addTag(key, value);
-                        key = "";
-                        value = "";
-                        j = 0;
-
-                    }
-
-                    c = dis.readChar();
-
-                }
+                Node node = (Node) ois.readObject();
+                this.getNodes().add(node);
 
             }
 
-            this.addNode(node);
-
+        } catch ( IOException | ClassNotFoundException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
         }
 
-        dis.close();
+    }
+
+    /*public void readWaysBin(){
+
+        String filename = "data/Ways.bin";
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+
+            int size = (Integer) ois.readObject();
+
+            for(int i = 0; i < size; i++){
+
+                Way way = (Way) ois.readObject();
+                this.getWays().add(way);
+
+            }
+
+        } catch ( IOException | ClassNotFoundException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }*/
+
+    public void readPoIsBin(){
+
+        String filename = "data/PoIs.bin";
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+
+            int size = (Integer) ois.readObject();
+
+            for(int i = 0; i < size; i++){
+
+                PoI poi = (PoI) ois.readObject();
+                this.getPoIS().add(poi);
+
+            }
+
+        } catch ( IOException | ClassNotFoundException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
 
     }
+
+    /*public void readGraphsBin(){
+
+        String filename = "data/Graphs.bin";
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+
+            int size = (Integer) ois.readObject();
+
+            for(int i = 0; i < size; i++){
+
+                Map graph = (Map) ois.readObject();
+                this.getGraphs().add(graph);
+
+            }
+
+        } catch ( IOException | ClassNotFoundException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }*/
+
+    /*public void readUsersBin(){
+
+        String filename = "data/Users.bin";
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+
+            int size = (Integer) ois.readObject();
+
+            for(int i = 0; i < size; i++){
+
+                User user = (User) ois.readObject();
+                this.getUsers().add(user);
+
+            }
+
+        } catch ( IOException | ClassNotFoundException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }*/
+
+    /*public void readAdminUsersBin(){
+
+        String filename = "data/AdminUsers.bin";
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+
+            int size = (Integer) ois.readObject();
+
+            for(int i = 0; i < size; i++){
+
+                AdminUser adminUser = (AdminUser) ois.readObject();
+                this.getAdminUsers().add(adminUser);
+
+            }
+
+        } catch ( IOException | ClassNotFoundException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }*/
 
     /* Funções de escrita para ficheiros de texto */
 
@@ -926,44 +1378,132 @@ public class BaseDeDados {
 
     }
 
-    public void writeNodesBin() throws IOException {
+    public void writeNodesBin(){
 
-        DataOutputStream dos = null;
-        dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("data/NodesOut.bin")));
+        String filename = "data/Nodes.bin";
 
-        dos.writeInt(this.getNodes().size());
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))){
 
-        for(Node node : this.getNodes()){
+            oos.writeObject(this.getNodes().size());
 
-            dos.writeInt(node.getId());
-            dos.writeInt(node.getIndex());
-            dos.writeDouble(node.getLatitude());
-            dos.writeDouble(node.getLongitude());
+            for(Node node : this.getNodes()){
 
-            if(node.getTagsNode() != null){
-
-                dos.writeInt(1);
-
-                for(String key : node.getTagsNode().keySet()){
-
-                    dos.writeChars(key);
-                    dos.writeChars(",");
-                    dos.writeChars(node.getTagsNode().get(key));
-                    dos.writeChars(",");
-
-                }
-
-                dos.writeChars("*");
+                oos.writeObject(node);
+                oos.flush();
 
             }
 
-            dos.writeInt(0);
-
+        } catch (IOException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
         }
 
-        dos.close();
+    }
+
+    public void writeWaysBin(){
+
+        String filename = "data/Ways.bin";
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))){
+
+            oos.writeObject(this.getWays().size());
+
+            for(DirectedEdge de : this.getWays()){
+
+                oos.writeObject(de);
+                oos.flush();
+
+            }
+
+        } catch (IOException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
 
     }
+
+    public void writePoIsBin(){
+
+        String filename = "data/PoIS.bin";
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))){
+
+            oos.writeObject(this.getPoIS().size());
+
+            for(PoI poi : this.getPoIS()){
+
+                oos.writeObject(poi);
+                oos.flush();
+
+            }
+
+        } catch (IOException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }
+
+    /*public void writeGraphsBin(){
+
+        String filename = "data/Graphs.bin";
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))){
+
+            oos.writeObject(this.getGraphs().size());
+
+            for(Map graph : this.getGraphs()){
+
+                oos.writeObject(graph);
+                oos.flush();
+
+            }
+
+        } catch (IOException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }*/
+
+    /*public void writeUsersBin(){
+
+        String filename = "data/Users.bin";
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))){
+
+            oos.writeObject(this.getUsers().size());
+
+            for(User user : this.getUsers()){
+
+                oos.writeObject(user);
+                oos.flush();
+
+            }
+
+        } catch (IOException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }*/
+
+    /*public void writeAdminUsersBin(){
+
+        String filename = "data/AdminUsers.bin";
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))){
+
+            oos.writeObject(this.getAdminUsers().size());
+
+            for(AdminUser adminUser : this.getAdminUsers()){
+
+                oos.writeObject(adminUser);
+                oos.flush();
+
+            }
+
+        } catch (IOException e) {
+            Logger.getLogger(Thread.currentThread().getName()).log(Level.SEVERE, null, e);
+        }
+
+    }*/
+
 
     /* Funções de impressão de dados */
 
@@ -1103,5 +1643,37 @@ public class BaseDeDados {
 
     }
 
+
+    /* Função para atualizar as etiquetas */
+
+    public void updateTagNode(String key, String value, int id){
+
+        Node node = searchNode(id);
+
+        node.getTagsNode().remove(key);
+
+        node.getTagsNode().put(key,value);
+
+    }
+
+    public void updateTagWay(String key, String value, int id){
+
+        Way way = searchWay(id);
+
+        way.getTagsWay().remove(key);
+
+        way.getTagsWay().put(key,value);
+
+    }
+
+    public void updateTagPoI(String key, String value, int id){
+
+        PoI poi = searchPoI(id);
+
+        poi.getTagsPoI().remove(key);
+
+        poi.getTagsPoI().put(key,value);
+
+    }
 
 }

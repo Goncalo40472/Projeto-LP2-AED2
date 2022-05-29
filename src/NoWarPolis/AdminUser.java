@@ -1,8 +1,5 @@
 package NoWarPolis;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AdminUser extends User{
 
     public AdminUser(String name, String contact, String email, String password){
@@ -37,29 +34,31 @@ public class AdminUser extends User{
 
     public void removeNode(BaseDeDados baseDeDados, int id){
 
-        Node node = baseDeDados.searchNode(id);
-        baseDeDados.removeNode(node);
+        baseDeDados.removeNode(id);
 
     }
 
     public void removeWay(BaseDeDados baseDeDados, int id){
 
-        Way way = baseDeDados.searchWay(id);
-        baseDeDados.removeWay(way);
+        baseDeDados.removeWay(id);
 
     }
 
     public void removePoI(BaseDeDados baseDeDados, int id){
 
-        PoI poi = baseDeDados.searchPoI(id);
-        baseDeDados.removePoI(poi);
+        baseDeDados.removePoI(id);
 
     }
 
     public void removeUser(BaseDeDados baseDeDados, String name){
 
-        User user = baseDeDados.searchUser(name);
-        baseDeDados.removeUser(user);
+        baseDeDados.removeUser(name);
+
+    }
+
+    public void removeAdminUser(BaseDeDados baseDeDados, String name){
+
+        baseDeDados.removeAdminUser(name);
 
     }
 

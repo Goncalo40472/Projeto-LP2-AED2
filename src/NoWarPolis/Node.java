@@ -3,9 +3,10 @@ package NoWarPolis;
 import edu.princeton.cs.algs4.RedBlackBST;
 import edu.princeton.cs.algs4.ST;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 
-public class Node {
+public class Node implements Serializable {
 
   /* Atributos da classe Node */
 
@@ -32,6 +33,7 @@ public class Node {
     setIndex(index);
     setLatitude(latitude);
     setLongitude(longitude);
+    this.tagsNode = new Hashtable<>();
 
   }
 

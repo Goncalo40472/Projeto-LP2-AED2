@@ -2,10 +2,11 @@ package NoWarPolis;
 
 import edu.princeton.cs.algs4.RedBlackBST;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class PoI extends Node {
+public class PoI extends Node implements Serializable {
 
     /* Atributos da classe PoI */
 
@@ -24,6 +25,7 @@ public class PoI extends Node {
 
         super(id, index, latitude,longitude);
         setName(name);
+        this.tagsPoI = new Hashtable<>();
 
     }
 
@@ -81,6 +83,12 @@ public class PoI extends Node {
     public ArrayList<User> searchVisitors(long time1, long time2){
 
         ArrayList<User> arrayUsers = new ArrayList<>();
+
+        if(this.usersThatVisitedPoI == null){
+
+            this.usersThatVisitedPoI = new RedBlackBST<>();
+
+        }
 
         for (long key : this.getUsersThatVisitedPoI().keys(time1,time2)){
 

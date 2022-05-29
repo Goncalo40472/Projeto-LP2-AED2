@@ -1,4 +1,0 @@
-3
-1,Antonio,912313,34234@ufp.edu.pt
-2,Joao,9231424,34384@ufp.edu.pt
-3,Ana,983918123,45785@ufp.edu.pt

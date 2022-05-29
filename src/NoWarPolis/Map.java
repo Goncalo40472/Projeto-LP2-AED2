@@ -2,10 +2,11 @@ package NoWarPolis;
 
 import edu.princeton.cs.algs4.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class Map extends EdgeWeightedDigraph{
+public class Map extends EdgeWeightedDigraph implements Serializable {
 
     /* Atributos da classe Map */
 
@@ -21,6 +22,8 @@ public class Map extends EdgeWeightedDigraph{
     public Map(int numVertexes, BaseDeDados baseDeDados){
 
         super(numVertexes);
+        this.baseDeDados = baseDeDados;
+        this.baseDeDados.getGraphs().add(this);
 
     }
 
@@ -44,7 +47,7 @@ public class Map extends EdgeWeightedDigraph{
 
     public ArrayList<Node> setOfNodes(String tag){
 
-        return baseDeDados.searchNodesWithTag(tag);
+        return baseDeDados.searchTagNodes(tag);
 
     }
 
@@ -55,7 +58,41 @@ public class Map extends EdgeWeightedDigraph{
 
     }
 
-    public void createSubgraph(String tag) {
+    public Iterable<DirectedEdge> findSPAvoidingSet(int source, int dest, ArrayList<Node> set){
+
+        EdgeWeightedDigraph graph = new EdgeWeightedDigraph(this.V());
+        int hasNode;
+
+        for(DirectedEdge de : this.edges()){
+
+            hasNode = 0;
+
+            for(Node node : set){
+
+                if(de.from() == node.getId() || de.to() == node.getId()){
+
+                    hasNode = 1;
+
+                }
+
+            }
+
+            if(hasNode == 0){
+
+                graph.addEdge(de);
+
+            }
+
+        }
+
+        DijkstraSP sp = new DijkstraSP(graph, source);
+        return sp.pathTo(dest);
+
+    }
+
+    public Map createSubgraph(String key, String value) {
+
+        Map subgraph = new Map(this.V(), this.baseDeDados);
 
         if(this.subgraphs == null){
 
@@ -63,8 +100,7 @@ public class Map extends EdgeWeightedDigraph{
 
         }
 
-        ArrayList<Way> ways = baseDeDados.getTagsWays().get(tag);
-        ArrayList<DirectedEdge> edgesSubgraph = new ArrayList<>();
+        ArrayList<Way> ways = baseDeDados.searchWayWithTag(key, value);
 
         for(DirectedEdge de : this.edges()){
 
@@ -72,7 +108,8 @@ public class Map extends EdgeWeightedDigraph{
 
                 if(way.from() == de.from() && way.to() == de.to()){
 
-                    edgesSubgraph.add(de);
+                    subgraph.addEdge(de);
+                    subgraph.getEdgeToWayReference().put(way, way.getId());
 
                 }
 
@@ -80,31 +117,9 @@ public class Map extends EdgeWeightedDigraph{
 
         }
 
-        ArrayList<Integer> vertexes = new ArrayList<>();
+        this.subgraphs.add(subgraph);
 
-        for(DirectedEdge de : edgesSubgraph){
-
-            if(!vertexes.contains(de.from())){
-
-                vertexes.add(de.from());
-
-            }
-
-            if(!vertexes.contains(de.to())){
-
-                vertexes.add(de.to());
-
-            }
-
-        }
-
-        Map subgraph = new Map(vertexes.size(), this.baseDeDados);
-
-        for(DirectedEdge de: edgesSubgraph){
-
-            subgraph.addEdge(de);
-
-        }
+        return subgraph;
 
     }
 
@@ -138,44 +153,49 @@ public class Map extends EdgeWeightedDigraph{
 
     }
 
-    public ArrayList<Way> top5ClosestTS(){
+    public RedBlackBST<Double, Node> top5ClosestTS(double longitude, double latitude){
 
-        ArrayList<Way> closestWays = new ArrayList<>();
-        RedBlackBST<Double, Way> tempWays = new RedBlackBST<>();
+        RedBlackBST<Double, Node> closestNodes = new RedBlackBST<>();
+        RedBlackBST<Double, Node> distNode = new RedBlackBST<>();
 
-        ArrayList<Way> tempWaysTS = this.baseDeDados.searchTagWays("traffic_signals");
+        ArrayList<Node> tempNodes = this.baseDeDados.searchNodeWithTag("highway","traffic_signals");
 
-        for(DirectedEdge de : this.edges()){
+        for(Node node : tempNodes){
 
-            int id = getEdgeToWayReference().get(de);
-            Way way = this.baseDeDados.searchWay(id);
-
-            if(tempWaysTS.contains(way)){
-
-                tempWays.put(de.weight(), way);
-
-            }
+         double dist = Math.sqrt(Math.pow(latitude - node.getLatitude(), 2) + Math.pow(longitude - node.getLongitude(), 2));
+         distNode.put(dist, node);
 
         }
 
-        if(tempWays.size() > 5){
+        if(distNode.size() > 5){
 
             for(int i = 0; i < 5; i++){
 
-                double key = tempWays.select(i);
-                closestWays.add(tempWays.get(key));
+                double key = distNode.select(i);
+                closestNodes.put(key, distNode.get(key));
 
             }
 
         }
 
-        return closestWays;
+        else{
+
+            for(int i = 0; i < distNode.size(); i++){
+
+                double key = distNode.select(i);
+                closestNodes.put(key, distNode.get(key));
+
+            }
+
+        }
+
+        return closestNodes;
 
     }
 
-    public ArrayList<Node> searchNodeByTag(String tag){
+    public ArrayList<Node> searchNodeByTag(String key, String value){
 
-        ArrayList<Node> nodesWithTag = baseDeDados.searchNodesWithTag(tag);
+        ArrayList<Node> nodesWithTag = baseDeDados.searchNodeWithTag(key,value);
         ArrayList<Node> nodes = new ArrayList<>();
 
         for(Node node : nodesWithTag){

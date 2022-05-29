@@ -2,11 +2,12 @@ package NoWarPolis;
 
 import edu.princeton.cs.algs4.RedBlackBST;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
 
   /* Atributos da classe User */
 
@@ -36,9 +37,6 @@ public class User {
     setContact(contact);
     setEmail(email);
     setPassword(password);
-    this.nodesVisited = new RedBlackBST<>();
-    this.waysVisited = new RedBlackBST<>();
-    this.PoIsVisited = new RedBlackBST<>();
 
   }
 
@@ -74,14 +72,17 @@ public class User {
   }
 
   public RedBlackBST<Long, Node> getNodesVisited() {
+    if(this.nodesVisited == null) this.nodesVisited = new RedBlackBST<>();
     return nodesVisited;
   }
 
   public RedBlackBST<Long, Way> getWaysVisited() {
+    if(this.waysVisited == null) this.waysVisited = new RedBlackBST<>();
     return waysVisited;
   }
 
   public RedBlackBST<Long, PoI> getPoIsVisited() {
+    if(this.PoIsVisited == null) this.PoIsVisited = new RedBlackBST<>();
     return PoIsVisited;
   }
   

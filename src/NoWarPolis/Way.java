@@ -2,10 +2,11 @@ package NoWarPolis;
 
 import edu.princeton.cs.algs4.*;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Objects;
 
-public class Way extends DirectedEdge {
+public class Way extends DirectedEdge implements Serializable {
 
     /* Atributos da classe Way */
 
@@ -22,6 +23,7 @@ public class Way extends DirectedEdge {
 
         super(idNoOrig,idNoDest,weight);
         setId(id);
+        this.tagsWay = new Hashtable<>();
 
     }
 
